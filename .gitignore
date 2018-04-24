@@ -1,0 +1,17 @@
+## Gradle
+.gradle
+gradle-app.setting
+build/
+
+## Java:
+*.class
+*.war
+*.ear
+hs_err_pid*
+
+## IntelliJ, Android Studio:
+.idea/
+*.ipr
+*.iws
+*.iml
+out/

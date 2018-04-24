@@ -1,0 +1,38 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    google()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+  dependencies {
+    classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+  }
+}
+
+allprojects {
+  apply plugin: 'idea'
+}
+
+configure(subprojects) {
+  apply plugin: 'kotlin'
+  sourceCompatibility = 1.8
+  compileJava {
+    options.fork = true
+    options.incremental = true
+  }
+}
+
+subprojects {
+  version = '0.0.1-SNAPSHOT'
+  ext.appName = 'hero-dynasty'
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://jitpack.io' }
+  }
+}
