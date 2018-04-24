@@ -1,7 +1,9 @@
 package com.runt9.heroDynasty.dungeon
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseInfo
@@ -10,15 +12,16 @@ import com.runt9.heroDynasty.lib.AppConst.bigHeight
 import com.runt9.heroDynasty.lib.AppConst.bigWidth
 import com.runt9.heroDynasty.lib.AppConst.cellHeight
 import com.runt9.heroDynasty.lib.AppConst.cellWidth
-import com.runt9.heroDynasty.lib.AppConst.gridHeight
-import com.runt9.heroDynasty.lib.AppConst.gridWidth
 import com.runt9.heroDynasty.lib.AppConst.viewportHeight
 import com.runt9.heroDynasty.lib.AppConst.viewportWidth
 import com.runt9.heroDynasty.util.getCoord
 import squidpony.squidgrid.Direction
 import squidpony.squidgrid.FOV
 import squidpony.squidgrid.Radius
-import squidpony.squidgrid.gui.gdx.*
+import squidpony.squidgrid.gui.gdx.AnimatedEntity
+import squidpony.squidgrid.gui.gdx.DefaultResources
+import squidpony.squidgrid.gui.gdx.ImageSquidPanel
+import squidpony.squidgrid.gui.gdx.SquidLayers
 import squidpony.squidgrid.mapping.DungeonUtility
 import squidpony.squidmath.Coord
 import squidpony.squidmath.GreasedRegion
@@ -27,9 +30,7 @@ import squidpony.squidmath.RNG
 
 class Dungeon {
     internal val rawDungeon: Array<CharArray>
-    private val fgColors: Array<Array<Color>>
-    private val bgColors: Array<Array<Color>>
-    private val visibleTiles = Array(gridWidth, { DoubleArray(gridHeight) })
+    private val visibleTiles = Array(bigWidth, { DoubleArray(bigHeight) })
     private val resistances: Array<DoubleArray>
     internal val player: AnimatedEntity
     private val display: ImageSquidPanel
@@ -44,29 +45,26 @@ class Dungeon {
     lateinit var seen: GreasedRegion
 
     init {
-        val atlas = DefaultResources.getIconAtlas()
+//        val atlas = DefaultResources.getIconAtlas()
 
-        layers = SquidLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getStretchableSquareFont())
-        layers.setTextSize(cellWidth.toFloat(), (cellHeight + 1).toFloat())
+        val atlas = TextureAtlas(Gdx.files.internal("dungeon_tiles.atlas"))
+
+        layers = SquidLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getSquareSmoothFont())
 
         display = ImageSquidPanel(bigWidth, bigHeight, layers.textFactory)
-        display.setImageSwap('#', atlas.findRegion("brick-wall"))
-        display.setImageSwap(',', atlas.findRegion("swamp"))
-        display.setImageSwap('~', atlas.findRegion("big-wave"))
-        display.setImageSwap('"', atlas.findRegion("grass"))
-        display.setImageSwap('+', atlas.findRegion("wooden-door"))
-        display.setImageSwap('@', atlas.findRegion("dwarf-face"))
+        display.setImageSwap('#', atlas.findRegion("wall"))
+        display.setImageSwap('~', atlas.findRegion("water"))
+        display.setImageSwap('+', atlas.findRegion("door-closed"))
+        display.setImageSwap('/', atlas.findRegion("door-closed"))
+        display.setImageSwap('@', atlas.findRegion("dwarf"))
+        display.setImageSwap('.', atlas.findRegion("floor"))
         layers.foregroundLayer = display
-        layers.animationDuration = 0.35f
 
         rawDungeon = DungeonGenerator().generateDungeon()
         resistances = DungeonUtility.generateResistances(rawDungeon)
         val playerCoord = GreasedRegion(rawDungeon, '.').singleRandom(RNG(LightRNG()))
-        player = layers.animateActor(playerCoord.x, playerCoord.y, '@', SColor.SAFETY_ORANGE)
+        player = layers.animateActor(playerCoord.x, playerCoord.y, '@', Color.WHITE)
         layers.addActor(player.actor)
-
-        fgColors = MapUtility.generateDefaultColors(rawDungeon)
-        bgColors = MapUtility.generateDefaultBGColors(rawDungeon)
 
         batch = SpriteBatch()
         stage = Stage(StretchViewport(viewportWidth, viewportHeight), batch)
@@ -102,15 +100,18 @@ class Dungeon {
     }
 
     fun render() {
+        stage.camera.position.x = (player.gridX * cellWidth).toFloat()
+        stage.camera.position.y = ((bigHeight - player.gridY) * cellHeight).toFloat()
+
         rawDungeon.forEachIndexed { i, next ->
             next.forEachIndexed loop@{ j, _ ->
                 val endColor = when {
-                    visibleTiles[i][j] > 0.0 -> 0.3f
-                    seen.contains(i, j) -> 0f
+                    visibleTiles[i][j] > 0.0 -> Color.WHITE
+                    seen.contains(i, j) -> Color.GRAY
                     else -> return@loop
                 }
 
-                layers.put(i, j, rawDungeon[i][j], fgColors[i][j].toFloatBits(), SColor.lerpFloatColors(bgColors[i][j].toFloatBits(), endColor, 0.3f), 40)
+                layers.put(i, j, rawDungeon[i][j], endColor, Color.BLACK, 40)
             }
         }
     }

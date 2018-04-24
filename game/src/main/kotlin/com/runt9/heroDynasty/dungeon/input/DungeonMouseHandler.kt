@@ -2,6 +2,8 @@ package com.runt9.heroDynasty.dungeon.input
 
 import com.badlogic.gdx.InputAdapter
 import com.runt9.heroDynasty.dungeon.Dungeon
+import com.runt9.heroDynasty.lib.AppConst.bigHeight
+import com.runt9.heroDynasty.lib.AppConst.bigWidth
 import com.runt9.heroDynasty.lib.AppConst.gridHeight
 import com.runt9.heroDynasty.lib.AppConst.gridWidth
 import com.runt9.heroDynasty.util.getCoord
@@ -25,7 +27,7 @@ class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: D
         val newScreenX = screenX + player.x - (gridWidth / 2)
         val newScreenY = screenY + player.y - (gridHeight / 2)
 
-        if (newScreenX < 0 || newScreenY < 0 || newScreenX >= gridWidth || newScreenY >= gridHeight || mouseInfo.cursor.x == newScreenX && mouseInfo.cursor.y == newScreenY) {
+        if (newScreenX < 0 || newScreenY < 0 || newScreenX >= bigWidth || newScreenY >= bigHeight || mouseInfo.cursor.x == newScreenX && mouseInfo.cursor.y == newScreenY) {
             return false
         }
 

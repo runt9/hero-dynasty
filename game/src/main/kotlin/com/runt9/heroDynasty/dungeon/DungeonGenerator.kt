@@ -7,8 +7,6 @@ import squidpony.squidgrid.mapping.DungeonGenerator
 class DungeonGenerator {
     fun generateDungeon(): Array<CharArray> {
         val dungeonGen = DungeonGenerator(bigWidth, bigHeight)
-        dungeonGen.addGrass(10)
-        dungeonGen.addWater(13, 6)
         dungeonGen.addDoors(15, true)
         return dungeonGen.generate()
     }
