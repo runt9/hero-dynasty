@@ -11,7 +11,7 @@ object AppConst {
     const val cellHeight = 32f
     const val viewportWidth = gridWidth * cellWidth
     const val viewportHeight = gridHeight * cellHeight
-    const val baseFov = 10.0
+    const val baseFov = 8.0
 
     val bgColor: SColor = SColor.DARK_SLATE_GRAY
 }

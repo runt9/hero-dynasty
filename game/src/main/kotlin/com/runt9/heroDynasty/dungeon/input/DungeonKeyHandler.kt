@@ -7,7 +7,7 @@ import squidpony.squidmath.Coord
 
 class DungeonKeyHandler(private val dungeon: Dungeon) : SquidInput.KeyHandler {
     override fun handle(key: Char, alt: Boolean, ctrl: Boolean, shift: Boolean) {
-        lateinit var direction: Coord
+        var direction: Coord = Coord.get(0, 0)
 
         when (key) {
             SquidInput.UP_ARROW -> direction = Coord.get(0, 1)

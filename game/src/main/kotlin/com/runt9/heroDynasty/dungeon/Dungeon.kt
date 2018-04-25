@@ -1,12 +1,11 @@
 package com.runt9.heroDynasty.dungeon
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.runt9.heroDynasty.dungeon.actor.Character
 import com.runt9.heroDynasty.dungeon.actor.DungeonLayout
+import com.runt9.heroDynasty.dungeon.assets.AssetMapper
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseInfo
 import com.runt9.heroDynasty.lib.AppConst.baseFov
 import com.runt9.heroDynasty.lib.AppConst.bigHeight
@@ -24,36 +23,35 @@ import squidpony.squidmath.RNG
 
 class Dungeon {
     internal val rawDungeon: Array<CharArray>
-    private val visibleTiles = Array(bigWidth.toInt(), { DoubleArray(bigHeight.toInt()) })
-    private val resistances: Array<DoubleArray>
+    private var visibleTiles = Array(bigWidth.toInt(), { DoubleArray(bigHeight.toInt()) })
     internal val player: Character
     private val layout: DungeonLayout
     private val pendingMoves = ArrayList<Coord>(200)
     private val batch: SpriteBatch
+    private val fov: FOV
 
     lateinit var mouseInfo: DungeonMouseInfo
     val stage: Stage
 
-    lateinit var blockage: GreasedRegion
-    lateinit var seen: GreasedRegion
+    private lateinit var blockage: GreasedRegion
+    private lateinit var seen: GreasedRegion
 
     init {
-        val atlas = TextureAtlas(Gdx.files.internal("dungeon_tiles.atlas"))
+        val assetMapper = AssetMapper()
 
         rawDungeon = DungeonGenerator().generateDungeon()
-        // TODO: Full mapping
-        layout = DungeonLayout(rawDungeon, mapOf('.' to atlas.findRegion("floor"), '#' to atlas.findRegion("wall")))
-        resistances = DungeonUtility.generateResistances(rawDungeon)
+        layout = DungeonLayout(rawDungeon, assetMapper.getAssetMap())
         val playerCoord = GreasedRegion(rawDungeon, '.').singleRandom(RNG(LightRNG()))
-        player = layout.addCharacter(atlas.findRegion("dwarf"), playerCoord)
+        player = layout.addCharacter(assetMapper.getCharacter(), playerCoord)
 
         batch = SpriteBatch()
         stage = Stage(StretchViewport(viewportWidth, viewportHeight), batch)
         stage.addActor(layout)
+        fov = FOV(FOV.RIPPLE)
     }
 
     fun rebuildFov() {
-        FOV.reuseFOV(resistances, visibleTiles, player.gridX, player.gridY, baseFov, Radius.CIRCLE)
+        visibleTiles = fov.calculateFOV(DungeonUtility.generateResistances(rawDungeon), player.gridX, player.gridY, baseFov, Radius.CIRCLE)
         if (!::blockage.isInitialized) {
             blockage = GreasedRegion(visibleTiles, 0.0)
             seen = blockage.not().copy()
@@ -73,10 +71,17 @@ class Dungeon {
         val newX = player.gridX + xMod
         val newY = player.gridY + yMod
 
+        // Probably a better place for this stuff
+        if (rawDungeon[newX][newY] == '+') {
+            layout.openDoor(newX, newY)
+            layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0f) { rebuildFov() }
+            return
+        }
+
         if (newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight && rawDungeon[newX][newY] != '#') {
             layout.slide(player, newX, newY, 0.03f) { rebuildFov() }
         } else {
-            layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0.1f)
+            layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0.1f) { rebuildFov() }
         }
     }
 
