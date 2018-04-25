@@ -86,7 +86,7 @@ class Dungeon {
         layout.updateVision(visibleTiles, seen)
     }
 
-    fun moveCharacter(coord: Coord) = moveCharacter(coord.x, coord.y)
+    fun queueNewMove(coord: Coord) = pendingMoves.add(Coord.get(player.gridX + coord.x, player.gridY + coord.y))
 
     private fun moveCharacter(xMod: Int, yMod: Int) {
         val newX = player.gridX + xMod

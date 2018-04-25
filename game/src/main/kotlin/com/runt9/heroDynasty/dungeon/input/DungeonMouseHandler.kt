@@ -10,17 +10,8 @@ import com.runt9.heroDynasty.util.getCoord
 import squidpony.squidmath.Coord
 
 class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: DungeonMouseInfo) : InputAdapter() {
+    // TODO: Mouse handling is still a bit wonky at times, should work on this
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        dungeon.moveToMouse()
-        mouseMoved(screenX, screenY)
-        return true
-    }
-
-    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        return mouseMoved(screenX, screenY)
-    }
-
-    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
         if (dungeon.hasPendingMoves()) return false
 
         val player = dungeon.player
@@ -37,6 +28,7 @@ class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: D
             mouseInfo.toCursor = mouseInfo.toCursor.subList(1, mouseInfo.toCursor.size)
         }
 
-        return false
+        dungeon.moveToMouse()
+        return true
     }
 }

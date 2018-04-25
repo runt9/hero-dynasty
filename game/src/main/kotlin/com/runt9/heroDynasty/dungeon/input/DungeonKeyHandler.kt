@@ -7,7 +7,7 @@ import squidpony.squidmath.Coord
 
 class DungeonKeyHandler(private val dungeon: Dungeon) : SquidInput.KeyHandler {
     override fun handle(key: Char, alt: Boolean, ctrl: Boolean, shift: Boolean) {
-        lateinit var direction: Direction
+        lateinit var direction: Coord
 
         when (key) {
             SquidInput.UP_ARROW -> direction = Coord.get(0, 1)
@@ -17,6 +17,6 @@ class DungeonKeyHandler(private val dungeon: Dungeon) : SquidInput.KeyHandler {
             SquidInput.ESCAPE -> Gdx.app.exit()
         }
 
-        dungeon.moveCharacter(direction)
+        dungeon.queueNewMove(direction)
     }
 }
