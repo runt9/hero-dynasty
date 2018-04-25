@@ -6,7 +6,6 @@ import com.runt9.heroDynasty.lib.AppConst.bigHeight
 import com.runt9.heroDynasty.lib.AppConst.bigWidth
 import com.runt9.heroDynasty.lib.AppConst.gridHeight
 import com.runt9.heroDynasty.lib.AppConst.gridWidth
-import com.runt9.heroDynasty.util.getCoord
 import squidpony.squidmath.Coord
 
 class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: DungeonMouseInfo) : InputAdapter() {

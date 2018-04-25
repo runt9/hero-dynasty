@@ -15,8 +15,8 @@ object DesktopLauncher {
         get() {
             val configuration = LwjglApplicationConfiguration()
             configuration.title = "hero-dynasty"
-            configuration.width = gridWidth * cellWidth
-            configuration.height = gridHeight * cellHeight
+            configuration.width = (gridWidth * cellWidth).toInt()
+            configuration.height = (gridHeight * cellHeight).toInt()
             intArrayOf(128, 64, 32, 16).forEach { size ->
                 configuration.addIcon("libgdx$size.png", FileType.Internal)
             }

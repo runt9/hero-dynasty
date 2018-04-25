@@ -27,7 +27,7 @@ class NewHeroDynastyApplication : ApplicationAdapter() {
         dungeon.mouseInfo = mouseInfo
         dungeon.rebuildFov()
 
-        input = SquidInput(DungeonKeyHandler(dungeon), SquidMouse(cellWidth.toFloat(), cellHeight.toFloat(), gridWidth.toFloat(), gridHeight.toFloat(), 0, 0, mouseHandler))
+        input = SquidInput(DungeonKeyHandler(dungeon), SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, mouseHandler))
         Gdx.input.inputProcessor = InputMultiplexer(dungeon.stage, input)
     }
 
@@ -36,16 +36,15 @@ class NewHeroDynastyApplication : ApplicationAdapter() {
 
         val currentZoomX = width.toFloat() / gridWidth
         val currentZoomY = height.toFloat() / gridHeight
-        val mouseOffsetX = (gridWidth and 1) * (currentZoomX * -0.5f).toInt()
-        val mouseOffsetY = (gridHeight and 1) * (currentZoomY * -0.5f).toInt()
-        input.mouse.reinitialize(currentZoomX, currentZoomY, gridWidth.toFloat(), gridHeight.toFloat(), mouseOffsetX, mouseOffsetY)
+        val mouseOffsetX = (gridWidth.toInt() and 1) * (currentZoomX * -0.5f).toInt()
+        val mouseOffsetY = (gridHeight.toInt() and 1) * (currentZoomY * -0.5f).toInt()
+        input.mouse.reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, mouseOffsetX, mouseOffsetY)
     }
 
     override fun render() {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        dungeon.render()
         if (!dungeon.handleMoves() && input.hasNext()) {
             input.next()
         }
