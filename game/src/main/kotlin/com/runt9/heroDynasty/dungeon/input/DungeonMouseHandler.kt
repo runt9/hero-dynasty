@@ -23,9 +23,9 @@ class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: D
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
         if (dungeon.hasPendingMoves()) return false
 
-        val player = dungeon.player.getCoord()
-        val newScreenX = screenX + player.x - (gridWidth / 2)
-        val newScreenY = screenY + player.y - (gridHeight / 2)
+        val player = dungeon.player
+        val newScreenX = (screenX + player.gridX - (gridWidth / 2)).toInt()
+        val newScreenY = ((gridHeight - 1 - screenY) + player.gridY - (gridHeight / 2)).toInt()
 
         if (newScreenX < 0 || newScreenY < 0 || newScreenX >= bigWidth || newScreenY >= bigHeight || mouseInfo.cursor.x == newScreenX && mouseInfo.cursor.y == newScreenY) {
             return false

@@ -83,9 +83,10 @@ class Dungeon {
 
         blockage.fringe8way()
         mouseInfo.resetPlayerToCursor(player.getCoord(), blockage)
+        layout.updateVision(visibleTiles, seen)
     }
 
-    fun moveCharacter(direction: Direction) = moveCharacter(direction.deltaX, direction.deltaY)
+    fun moveCharacter(coord: Coord) = moveCharacter(coord.x, coord.y)
 
     private fun moveCharacter(xMod: Int, yMod: Int) {
         val newX = player.gridX + xMod
