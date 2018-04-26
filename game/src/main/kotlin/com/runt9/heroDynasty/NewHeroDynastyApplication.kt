@@ -45,11 +45,7 @@ class NewHeroDynastyApplication : ApplicationAdapter() {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        if (!dungeon.handleMoves() && input.hasNext()) {
-            input.next()
-        }
-
+        dungeon.handleMoves(input.hasNext()) { input.next() }
         dungeon.draw()
     }
-
 }

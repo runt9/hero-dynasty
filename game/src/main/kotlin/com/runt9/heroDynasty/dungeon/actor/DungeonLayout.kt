@@ -27,6 +27,7 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
          texturedDungeon = mapDungeonToTextures(dungeon, assetMap)
      }
 
+    // TODO: Race condition causing this to not go back to 0?
     fun isAnimating() = animationCount > 0
 
     fun addCharacter(sprite: TextureRegion, coordinates: Coord): Character {
@@ -77,9 +78,12 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
         }
 
         characters.forEach {
-            it.act(Gdx.graphics.deltaTime)
-            batch.color = Color.WHITE
-            it.draw(batch, parentAlpha)
+            val coord = it.getCoord()
+            if (visibleTiles[coord.x][coord.y] > 0.0) {
+                it.act(Gdx.graphics.deltaTime)
+                batch.color = Color.WHITE
+                it.draw(batch, parentAlpha)
+            }
         }
     }
 

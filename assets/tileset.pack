@@ -150,37 +150,44 @@ floor2
   orig: 32, 32
   offset: 0, 0
   index: -1
-open_door
+kobold_new
   rotate: false
   xy: 715, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-shallow_water0
+open_door
   rotate: false
   xy: 749, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-shallow_water1
+shallow_water0
   rotate: false
   xy: 783, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-stone_stairs_down
+shallow_water1
   rotate: false
   xy: 817, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-stone_stairs_up
+stone_stairs_down
   rotate: false
   xy: 851, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stone_stairs_up
+  rotate: false
+  xy: 885, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

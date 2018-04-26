@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 
 class AssetMapper {
-    private val atlas: TextureAtlas = TextureAtlas(Gdx.files.internal("tileset.atlas"))
+    private val atlas: TextureAtlas = TextureAtlas(Gdx.files.internal("tileset.pack"))
 
     fun getCharacter(): AtlasRegion = atlas.findRegion("draconian_black_male")
+    fun getMonster(): AtlasRegion = atlas.findRegion("kobold_new")
 
     fun getAssetMap(): Map<Char, List<AtlasRegion>> {
         val floors = (1 until 2).map { atlas.findRegion("floor$it") }
