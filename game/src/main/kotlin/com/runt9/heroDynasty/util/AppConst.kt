@@ -1,8 +1,10 @@
-package com.runt9.heroDynasty.lib
+package com.runt9.heroDynasty.util
 
 import squidpony.squidgrid.gui.gdx.SColor
 
 object AppConst {
+    const val DOUBLE_ADDER = 1e-53
+
     const val gridWidth = 50f
     const val gridHeight = 25f
     const val bigWidth = gridWidth * 2

@@ -8,8 +8,9 @@ class AssetMapper {
     private val atlas: TextureAtlas = TextureAtlas(Gdx.files.internal("tileset.pack"))
 
     fun getCharacter(): AtlasRegion = atlas.findRegion("draconian_black_male")
-    fun getMonster(): AtlasRegion = atlas.findRegion("kobold_new")
+    fun getEnemy(): AtlasRegion = atlas.findRegion("kobold_new")
 
+    // TODO: Can use atlas.findRegions instead
     fun getAssetMap(): Map<Char, List<AtlasRegion>> {
         val floors = (1 until 2).map { atlas.findRegion("floor$it") }
         val walls = (0 until 11).map { atlas.findRegion("catacombs$it") }

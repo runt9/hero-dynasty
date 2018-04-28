@@ -3,11 +3,11 @@ package com.runt9.heroDynasty.desktop
 import com.badlogic.gdx.Files.FileType
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import com.runt9.heroDynasty.NewHeroDynastyApplication
-import com.runt9.heroDynasty.lib.AppConst.cellHeight
-import com.runt9.heroDynasty.lib.AppConst.cellWidth
-import com.runt9.heroDynasty.lib.AppConst.gridHeight
-import com.runt9.heroDynasty.lib.AppConst.gridWidth
+import com.runt9.heroDynasty.HeroDynastyApplication
+import com.runt9.heroDynasty.util.AppConst.cellHeight
+import com.runt9.heroDynasty.util.AppConst.cellWidth
+import com.runt9.heroDynasty.util.AppConst.gridHeight
+import com.runt9.heroDynasty.util.AppConst.gridWidth
 
 /** Launches the desktop (LWJGL) application.  */
 object DesktopLauncher {
@@ -29,6 +29,6 @@ object DesktopLauncher {
     }
 
     private fun createApplication(): LwjglApplication {
-        return LwjglApplication(NewHeroDynastyApplication(), defaultConfiguration)
+        return LwjglApplication(HeroDynastyApplication(), defaultConfiguration)
     }
 }

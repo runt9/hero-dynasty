@@ -8,15 +8,15 @@ import com.runt9.heroDynasty.dungeon.Dungeon
 import com.runt9.heroDynasty.dungeon.input.DungeonKeyHandler
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseHandler
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseInfo
-import com.runt9.heroDynasty.lib.AppConst.bgColor
-import com.runt9.heroDynasty.lib.AppConst.cellHeight
-import com.runt9.heroDynasty.lib.AppConst.cellWidth
-import com.runt9.heroDynasty.lib.AppConst.gridHeight
-import com.runt9.heroDynasty.lib.AppConst.gridWidth
+import com.runt9.heroDynasty.util.AppConst.bgColor
+import com.runt9.heroDynasty.util.AppConst.cellHeight
+import com.runt9.heroDynasty.util.AppConst.cellWidth
+import com.runt9.heroDynasty.util.AppConst.gridHeight
+import com.runt9.heroDynasty.util.AppConst.gridWidth
 import squidpony.squidgrid.gui.gdx.SquidInput
 import squidpony.squidgrid.gui.gdx.SquidMouse
 
-class NewHeroDynastyApplication : ApplicationAdapter() {
+class HeroDynastyApplication : ApplicationAdapter() {
     private lateinit var input: SquidInput
     private lateinit var dungeon: Dungeon
 

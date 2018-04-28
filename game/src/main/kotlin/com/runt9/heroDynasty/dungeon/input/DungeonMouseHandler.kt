@@ -2,10 +2,10 @@ package com.runt9.heroDynasty.dungeon.input
 
 import com.badlogic.gdx.InputAdapter
 import com.runt9.heroDynasty.dungeon.Dungeon
-import com.runt9.heroDynasty.lib.AppConst.bigHeight
-import com.runt9.heroDynasty.lib.AppConst.bigWidth
-import com.runt9.heroDynasty.lib.AppConst.gridHeight
-import com.runt9.heroDynasty.lib.AppConst.gridWidth
+import com.runt9.heroDynasty.util.AppConst.bigHeight
+import com.runt9.heroDynasty.util.AppConst.bigWidth
+import com.runt9.heroDynasty.util.AppConst.gridHeight
+import com.runt9.heroDynasty.util.AppConst.gridWidth
 import squidpony.squidmath.Coord
 
 class DungeonMouseHandler(private val dungeon: Dungeon, private val mouseInfo: DungeonMouseInfo) : InputAdapter() {

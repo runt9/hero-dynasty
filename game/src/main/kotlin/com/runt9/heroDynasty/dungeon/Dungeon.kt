@@ -3,32 +3,38 @@ package com.runt9.heroDynasty.dungeon
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.runt9.heroDynasty.dungeon.actor.Character
+import com.runt9.heroDynasty.character.testData.testEnemies
+import com.runt9.heroDynasty.character.testData.testPlayer
+import com.runt9.heroDynasty.core.basicAttack
+import com.runt9.heroDynasty.core.rng
+import com.runt9.heroDynasty.dungeon.actor.CharacterSprite
 import com.runt9.heroDynasty.dungeon.actor.DungeonLayout
 import com.runt9.heroDynasty.dungeon.assets.AssetMapper
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseInfo
-import com.runt9.heroDynasty.lib.AppConst.baseFov
-import com.runt9.heroDynasty.lib.AppConst.bigHeight
-import com.runt9.heroDynasty.lib.AppConst.bigWidth
-import com.runt9.heroDynasty.lib.AppConst.viewportHeight
-import com.runt9.heroDynasty.lib.AppConst.viewportWidth
+import com.runt9.heroDynasty.util.AppConst.baseFov
+import com.runt9.heroDynasty.util.AppConst.bigHeight
+import com.runt9.heroDynasty.util.AppConst.bigWidth
+import com.runt9.heroDynasty.util.AppConst.viewportHeight
+import com.runt9.heroDynasty.util.AppConst.viewportWidth
 import squidpony.squidai.DijkstraMap
 import squidpony.squidgrid.Direction
 import squidpony.squidgrid.FOV
 import squidpony.squidgrid.Radius
 import squidpony.squidgrid.mapping.DungeonUtility
-import squidpony.squidmath.*
+import squidpony.squidmath.Coord
+import squidpony.squidmath.GreasedRegion
+import squidpony.squidmath.OrderedMap
 
 class Dungeon {
-    enum class Phase { WAIT, PLAYER_ANIM, MONSTER_ANIM }
+    enum class Phase { WAIT, PLAYER_ANIM, ENEMY_ANIM }
     var phase = Phase.WAIT
 
     val stage: Stage
     private val layout: DungeonLayout
     internal val rawDungeon: Array<CharArray>
 
-    internal val player: Character
-    private val monsters: OrderedMap<Coord, Character> = OrderedMap(20)
+    internal val player: CharacterSprite
+    private val enemies: OrderedMap<Coord, CharacterSprite> = OrderedMap(20)
     private val fov: FOV
 
     private val pendingMoves = ArrayList<Coord>(200)
@@ -39,7 +45,6 @@ class Dungeon {
     private lateinit var seen: GreasedRegion
 
     private val getToPlayer: DijkstraMap
-    private val rng = RNG(LightRNG())
 
     init {
         val assetMapper = AssetMapper()
@@ -48,12 +53,12 @@ class Dungeon {
         layout = DungeonLayout(rawDungeon, assetMapper.getAssetMap())
         val floors = GreasedRegion(rawDungeon, '.')
         val playerCoord = floors.singleRandom(rng)
-        player = layout.addCharacter(assetMapper.getCharacter(), playerCoord)
+        player = layout.addCharacter(assetMapper.getCharacter(), playerCoord, testPlayer)
         floors.remove(element = playerCoord)
-        (0 until 20).forEach {
-            val monsterCoord = floors.singleRandom(rng)
-            floors.remove(element = monsterCoord)
-            monsters[monsterCoord] = layout.addCharacter(assetMapper.getMonster(), monsterCoord)
+        testEnemies.forEach {
+            val enemyCoord = floors.singleRandom(rng)
+            floors.remove(element = enemyCoord)
+            enemies[enemyCoord] = layout.addCharacter(assetMapper.getEnemy(), enemyCoord, it)
         }
         getToPlayer = DijkstraMap(rawDungeon, DijkstraMap.Measurement.EUCLIDEAN)
 
@@ -87,8 +92,9 @@ class Dungeon {
         if (rawDungeon[newX][newY] == '+') {
             layout.openDoor(newX, newY)
             layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0f) { rebuildFov() }
-        } else if (monsters.containsKey(Coord.get(newX, newY))) {
+        } else if (enemies.containsKey(Coord.get(newX, newY))) {
             layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0.1f) { rebuildFov() }
+            basicAttack(player.character, enemies[Coord.get(newX, newY)]!!.character)
         } else if (newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight && rawDungeon[newX][newY] != '#') {
             layout.slide(player, newX, newY, 0.03f) { rebuildFov() }
         } else {
@@ -108,8 +114,8 @@ class Dungeon {
                 nextCb()
             } else {
                 when (phase) {
-                    Phase.MONSTER_ANIM -> phase = Phase.WAIT
-                    Phase.PLAYER_ANIM -> moveMonsters()
+                    Phase.ENEMY_ANIM -> phase = Phase.WAIT
+                    Phase.PLAYER_ANIM -> moveEnemies()
                     Dungeon.Phase.WAIT -> {}
                 }
             }
@@ -117,8 +123,8 @@ class Dungeon {
         }
 
         when (phase) {
-            Phase.PLAYER_ANIM -> moveMonsters()
-            Phase.WAIT, Phase.MONSTER_ANIM -> {
+            Phase.PLAYER_ANIM -> moveEnemies()
+            Phase.WAIT, Phase.ENEMY_ANIM -> {
                 val move = pendingMoves.removeAt(0)
 
                 if (!mouseInfo.toCursor.isEmpty()) {
@@ -131,33 +137,44 @@ class Dungeon {
                 }
             }
         }
+
+
+        enemies.forEach { coord, sprite ->
+            if (!sprite.character.isAlive) {
+                enemies.remove(coord)
+                layout.removeCharacter(sprite)
+            }
+        }
     }
 
-    private fun moveMonsters() {
-        phase = Phase.MONSTER_ANIM
-        val monsterCoords = monsters.keysAsOrderedSet()
+    // TODO: Refactor
+    private fun moveEnemies() {
+        phase = Phase.ENEMY_ANIM
+        val enemyCoords = enemies.keysAsOrderedSet()
         val playerCoord = player.getCoord()
 
-        monsters.forEach { coord, monster ->
+        enemies.forEach { coord, enemy ->
+            // TODO: NPE??
             if (visibleTiles[coord.x][coord.y] == 0.0) {
                 return@forEach
             }
 
             getToPlayer.clearGoals()
-            val nextMoves = getToPlayer.findPath(1, monsterCoords, null, coord, playerCoord)
+            val nextMoves = getToPlayer.findPath(1, enemyCoords, null, coord, playerCoord)
             if (nextMoves == null || nextMoves.isEmpty()) {
                 return@forEach
             }
 
-            monsterCoords.remove(coord)
+            enemyCoords.remove(coord)
             val tmp = nextMoves[0]
             if (tmp.x == playerCoord.x && tmp.y == playerCoord.y) {
-                layout.bump(monster, Direction.getRoughDirection(tmp.x - coord.x, tmp.y - coord.y), 0.1f)
-                monsterCoords.add(coord)
+                layout.bump(enemy, Direction.getRoughDirection(tmp.x - coord.x, tmp.y - coord.y), 0.1f)
+                basicAttack(enemy.character, player.character)
+                enemyCoords.add(coord)
             } else {
-                monsters.alter(coord, tmp)
-                layout.slide(monster, tmp.x, tmp.y, 0.03f)
-                monsterCoords.add(tmp)
+                enemies.alter(coord, tmp)
+                layout.slide(enemy, tmp.x, tmp.y, 0.03f)
+                enemyCoords.add(tmp)
             }
         }
     }
