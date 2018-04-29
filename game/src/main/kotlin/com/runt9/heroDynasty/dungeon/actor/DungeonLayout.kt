@@ -3,24 +3,23 @@ package com.runt9.heroDynasty.dungeon.actor
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.runt9.heroDynasty.character.Character
-import com.runt9.heroDynasty.character.Npc
-import com.runt9.heroDynasty.character.NpcPowerLevel
 import com.runt9.heroDynasty.core.rng
 import com.runt9.heroDynasty.util.AppConst.cellHeight
 import com.runt9.heroDynasty.util.AppConst.cellWidth
 import squidpony.squidgrid.Direction
 import squidpony.squidmath.Coord
 import squidpony.squidmath.GreasedRegion
+import kotlin.math.abs
 
-// TODO: Refactor as group with everything as children. Move damage numbers here
-class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Actor() {
-    private val characterSprites: MutableList<CharacterSprite> = mutableListOf()
+class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Group() {
     private var animationCount = 0
     private val texturedDungeon: MutableMap<Coord, TextureAtlas.AtlasRegion>
     lateinit var visibleTiles: Array<DoubleArray>
@@ -37,7 +36,7 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
 
     fun addCharacter(sprite: TextureRegion, coordinates: Coord, character: Character): CharacterSprite {
         val characterSprite = CharacterSprite(sprite, coordinates.x, coordinates.y, character)
-        characterSprites.add(characterSprite)
+        addActor(characterSprite)
         return characterSprite
     }
 
@@ -65,8 +64,6 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
-        super.draw(batch, parentAlpha)
-
         texturedDungeon.forEach { coord, texture ->
             val x = coord.x
             val y = coord.y
@@ -83,26 +80,17 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
             batch.draw(texture, x.toFloat() * cellWidth, y.toFloat() * cellHeight, cellWidth, cellHeight)
         }
 
-        characterSprites.forEach {
-            val coord = it.getCoord()
+        children.filterIsInstance(CharacterSprite::class.java).forEach {
+            val coord = it.coord
             if (visibleTiles[coord.x][coord.y] > 0.0) {
                 it.act(Gdx.graphics.deltaTime)
-                batch.color = Color.WHITE
-
-                // TODO: Denote enemy level another way
-                if (it.character is Npc) {
-                    batch.color = when(it.character.powerLevel) {
-                        NpcPowerLevel.CREATURE -> Color.WHITE
-                        NpcPowerLevel.MINION -> Color.YELLOW
-                        NpcPowerLevel.GUARD -> Color.BLUE
-                        NpcPowerLevel.BOSS -> Color.RED
-                        NpcPowerLevel.HERO -> Color.PURPLE
-                    }
-                }
-
-                it.draw(batch, parentAlpha)
+                it.isVisible = true
+            } else {
+                it.isVisible = false
             }
         }
+
+        super.draw(batch, parentAlpha)
     }
 
     fun updateVision(visibleTiles: Array<DoubleArray>, seen: GreasedRegion) {
@@ -128,5 +116,29 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
         texturedDungeon[Coord.get(x, y)] = assetMap['/']!![0]
     }
 
-    fun removeCharacter(sprite: CharacterSprite) = characterSprites.remove(sprite)
+    fun removeCharacter(sprite: CharacterSprite) = removeActor(sprite)
+
+    fun doFloatingNumber(healthDiff: Int, attacker: CharacterSprite, defender: CharacterSprite, heal: Boolean = false) {
+        val floatingNumber = FloatingNumber(healthDiff)
+        addActor(floatingNumber)
+        val attackVector = Direction.getRoughDirection(defender.coord.x - attacker.coord.x, defender.coord.y - attacker.coord.y)
+        floatingNumber.x = defender.x + 10
+        floatingNumber.y = defender.y + cellHeight / 2
+        floatingNumber.color = if (heal) Color.GREEN else Color.RED
+        floatingNumber.addAction(Actions.parallel(
+                Actions.moveBy(40f * attackVector.deltaX, 40f * attackVector.deltaY, 2f),
+                Actions.fadeOut(2f),
+                Actions.scaleTo(1f, 1f, 2f)
+        ))
+        floatingNumber.addAction(Actions.after(Actions.removeActor()))
+    }
+
+    private class FloatingNumber(private val healthDiff: Int) : Actor() {
+        val font = BitmapFont()
+
+        override fun draw(batch: Batch, parentAlpha: Float) {
+            font.color = color
+            font.draw(batch, if (healthDiff > 0) abs(healthDiff).toString() else "+$healthDiff", x, y)
+        }
+    }
 }

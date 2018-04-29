@@ -2,23 +2,22 @@ package com.runt9.heroDynasty.dungeon.actor
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle
 import com.runt9.heroDynasty.character.Character
+import com.runt9.heroDynasty.character.Npc
+import com.runt9.heroDynasty.character.NpcPowerLevel
 import com.runt9.heroDynasty.core.getPixmapDrawable
 import com.runt9.heroDynasty.util.AppConst.cellHeight
 import com.runt9.heroDynasty.util.AppConst.cellWidth
 import squidpony.squidmath.Coord
-import kotlin.math.abs
 
-class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val character: Character) : Group() {
+class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val character: Character) : Actor() {
     val gridX: Int get() = (x / cellWidth).toInt()
     val gridY: Int get() = (y / cellHeight).toInt()
+    val coord: Coord get() = Coord.get(gridX, gridY)
     private val healthBar: ProgressBar
 
     init {
@@ -35,13 +34,25 @@ class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val cha
 
         val healthBar = ProgressBar(0.0f, character.hitPoints.max.toFloat(), 0.01f, true, progressBarStyle)
         healthBar.value = character.hitPoints.current.toFloat()
-        healthBar.setBounds(x, y + 2, 3f, cellHeight - 4f)
+        healthBar.setBounds(x, y + 4, 3f, cellHeight - 8f)
         return healthBar
     }
 
-    fun getCoord(): Coord = Coord.get(gridX, gridY)
+
 
     override fun draw(batch: Batch, parentAlpha: Float) {
+        if (character is Npc) {
+            batch.color = when(character.powerLevel) {
+                NpcPowerLevel.CREATURE -> Color.WHITE
+                NpcPowerLevel.MINION -> Color.YELLOW
+                NpcPowerLevel.GUARD -> Color.BLUE
+                NpcPowerLevel.BOSS -> Color.CYAN
+                NpcPowerLevel.HERO -> Color.RED
+            }
+        } else {
+            batch.color = Color.WHITE
+        }
+
         batch.draw(sprite, x, y, cellWidth, cellHeight)
 
         // TODO: Make own actor?
@@ -50,26 +61,5 @@ class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val cha
         healthBar.draw(batch, parentAlpha)
 
         super.draw(batch, parentAlpha)
-    }
-
-    fun doFloatingNumber(healthDiff: Int, heal: Boolean = false) {
-        val floatingNumber = FloatingNumber(healthDiff)
-        floatingNumber.color = if (heal) Color.GREEN else Color.RED
-        // TODO: Properly center text
-        // TODO: Needs a refactor since this can end up drawn underneath other sprites.
-        floatingNumber.x = 6f
-        floatingNumber.y = cellHeight + 5
-        addActor(floatingNumber)
-        floatingNumber.addAction(Actions.parallel(Actions.moveBy(0f, cellHeight, 2f), Actions.fadeOut(2f)))
-        floatingNumber.addAction(Actions.after(Actions.removeActor()))
-    }
-
-    private class FloatingNumber(private val healthDiff: Int) : Actor() {
-        val font = BitmapFont()
-
-        override fun draw(batch: Batch, parentAlpha: Float) {
-            font.color = color
-            font.draw(batch, if (healthDiff > 0) abs(healthDiff).toString() else "+$healthDiff", x, y)
-        }
     }
 }

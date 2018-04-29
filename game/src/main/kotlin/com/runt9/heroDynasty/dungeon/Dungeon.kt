@@ -78,7 +78,7 @@ class Dungeon {
         }
 
         blockage.fringe8way()
-        resetCursorPath(player.getCoord(), blockage, false)
+        resetCursorPath(player.coord, blockage, false)
         layout.updateVision(visibleTiles, seen)
     }
 
@@ -99,7 +99,7 @@ class Dungeon {
                 layout.bump(player, Direction.getRoughDirection(xMod, yMod), 0.1f) { rebuildFov() }
                 val damage = basicAttack(player.character, enemies[Coord.get(newX, newY)]!!.character)
                 if (damage > 0.0) {
-                    enemies[Coord.get(newX, newY)]!!.doFloatingNumber(damage.roundToInt())
+                    layout.doFloatingNumber(damage.roundToInt(), player, enemies[Coord.get(newX, newY)]!!)
                 }
             }
             newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight && rawDungeon[newX][newY] != '#' -> layout.slide(player, newX, newY, 0.03f) { rebuildFov() } // Move
@@ -140,7 +140,7 @@ class Dungeon {
                 }
 
                 if (pendingMoves.isEmpty()) {
-                    resetCursorPath(player.getCoord(), blockage, true)
+                    resetCursorPath(player.coord, blockage, true)
                 }
             }
         }
@@ -157,7 +157,7 @@ class Dungeon {
     private fun moveEnemies() {
         phase = Phase.ENEMY_ANIM
         val enemyCoords = enemies.keysAsOrderedSet()
-        val playerCoord = player.getCoord()
+        val playerCoord = player.coord
 
         enemies.forEach { coord, enemy ->
             // TODO: I have NO IDEA why coord can be null, probably something to do with this guy's OrderedMap implementation
@@ -179,7 +179,7 @@ class Dungeon {
 
                 val damage = basicAttack(enemy.character, player.character)
                 if (damage > 0.0) {
-                    player.doFloatingNumber(damage.roundToInt())
+                    layout.doFloatingNumber(damage.roundToInt(), enemy, player)
                 }
 
                 enemyCoords.add(coord)
@@ -194,7 +194,6 @@ class Dungeon {
     fun draw() {
         stage.camera.position.x = player.x
         stage.camera.position.y = player.y
-        layout.clear()
         stage.act()
         stage.viewport.apply(false)
         stage.draw()
