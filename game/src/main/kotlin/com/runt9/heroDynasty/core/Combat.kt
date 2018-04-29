@@ -9,7 +9,7 @@ val unarmedDamageRange = Pair(0.25, 0.35)
 val accuracyClamp = Pair(5.0, 95.0)
 val incomingDamageClamp = Pair(0.1, 2.0)
 
-fun basicAttack(attacker: Character, defender: Character) {
+fun basicAttack(attacker: Character, defender: Character): Double {
     // TODO: Dual-wielding
 
     val accuracy = attacker.getModifier(ModifierType.ACCURACY)
@@ -17,7 +17,7 @@ fun basicAttack(attacker: Character, defender: Character) {
 
     // Attack roll
     val attackRollData = randomChanceReturningData(1 + (accuracy - dodge), accuracyClamp)
-    if (!attackRollData.success) return
+    if (!attackRollData.success) return 0.0
 
     // Damage roll
     // TODO: Factor in abilities that add additional damage
@@ -35,4 +35,5 @@ fun basicAttack(attacker: Character, defender: Character) {
     val critDamage = attacker.getModifier(ModifierType.CRIT_DAMAGE)
     val finalDamage = if (randomChance(critThreshold)) damageRoll * critDamage else damageRoll
     defender.hitPoints.current -= finalDamage
+    return finalDamage
 }

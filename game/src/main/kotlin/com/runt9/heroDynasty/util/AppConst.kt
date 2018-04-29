@@ -6,7 +6,7 @@ object AppConst {
     const val DOUBLE_ADDER = 1e-53
 
     const val gridWidth = 50f
-    const val gridHeight = 25f
+    const val gridHeight = 26f
     const val bigWidth = gridWidth * 2
     const val bigHeight = gridHeight * 2
     const val cellWidth = 32f

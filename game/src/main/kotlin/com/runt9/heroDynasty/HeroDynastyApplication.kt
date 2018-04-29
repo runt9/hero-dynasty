@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.runt9.heroDynasty.dungeon.Dungeon
 import com.runt9.heroDynasty.dungeon.input.DungeonKeyHandler
 import com.runt9.heroDynasty.dungeon.input.DungeonMouseHandler
-import com.runt9.heroDynasty.dungeon.input.DungeonMouseInfo
 import com.runt9.heroDynasty.util.AppConst.bgColor
 import com.runt9.heroDynasty.util.AppConst.cellHeight
 import com.runt9.heroDynasty.util.AppConst.cellWidth
@@ -22,9 +21,7 @@ class HeroDynastyApplication : ApplicationAdapter() {
 
     override fun create() {
         dungeon = Dungeon()
-        val mouseInfo = DungeonMouseInfo(dungeon.rawDungeon)
-        val mouseHandler = DungeonMouseHandler(dungeon, mouseInfo)
-        dungeon.mouseInfo = mouseInfo
+        val mouseHandler = DungeonMouseHandler(dungeon)
         dungeon.rebuildFov()
 
         input = SquidInput(DungeonKeyHandler(dungeon), SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, mouseHandler))
@@ -45,6 +42,7 @@ class HeroDynastyApplication : ApplicationAdapter() {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
+        // TODO: Not sure I like this. With animations, this queues up inputs and processes them all in order
         dungeon.handleMoves(input.hasNext()) { input.next() }
         dungeon.draw()
     }

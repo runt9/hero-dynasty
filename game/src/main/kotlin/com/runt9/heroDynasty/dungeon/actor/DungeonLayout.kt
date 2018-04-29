@@ -18,6 +18,7 @@ import squidpony.squidgrid.Direction
 import squidpony.squidmath.Coord
 import squidpony.squidmath.GreasedRegion
 
+// TODO: Refactor as group with everything as children. Move damage numbers here
 class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Actor() {
     private val characterSprites: MutableList<CharacterSprite> = mutableListOf()
     private var animationCount = 0
@@ -40,13 +41,14 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
         return characterSprite
     }
 
+    // TODO: These functions are cool and all, but animations slow the game down a lot and complicate the code, are we sure we want them?
     fun slide(character: CharacterSprite, newX: Int, newY: Int, duration: Float, callback: (() -> Unit)? = null) {
         animationCount++
         character.addAction(Actions.sequence(
                 Actions.moveTo(newX * cellWidth, newY * cellWidth, duration),
                 Actions.delay(duration, Actions.run {
-                    callback?.invoke()
                     --animationCount
+                    callback?.invoke()
                 })))
     }
 
@@ -57,8 +59,8 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
                         character.y + direction.deltaY.toFloat() * 0.35f * cellHeight, duration * 0.15f),
                 Actions.moveTo(character.x, character.y, duration * 0.45f),
                 Actions.delay(duration, Actions.run {
-                    callback?.invoke()
                     --animationCount
+                    callback?.invoke()
                 })))
     }
 
@@ -87,6 +89,7 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
                 it.act(Gdx.graphics.deltaTime)
                 batch.color = Color.WHITE
 
+                // TODO: Denote enemy level another way
                 if (it.character is Npc) {
                     batch.color = when(it.character.powerLevel) {
                         NpcPowerLevel.CREATURE -> Color.WHITE
