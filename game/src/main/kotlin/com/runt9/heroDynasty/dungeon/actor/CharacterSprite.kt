@@ -38,8 +38,6 @@ class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val cha
         return healthBar
     }
 
-
-
     override fun draw(batch: Batch, parentAlpha: Float) {
         if (character is Npc) {
             batch.color = when(character.powerLevel) {

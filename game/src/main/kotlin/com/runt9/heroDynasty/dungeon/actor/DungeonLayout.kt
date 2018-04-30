@@ -2,11 +2,8 @@ package com.runt9.heroDynasty.dungeon.actor
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -19,6 +16,7 @@ import squidpony.squidmath.Coord
 import squidpony.squidmath.GreasedRegion
 import kotlin.math.abs
 
+// TODO: FloatingText needs some refactoring
 class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Group() {
     private var animationCount = 0
     private val texturedDungeon: MutableMap<Coord, TextureAtlas.AtlasRegion>
@@ -119,26 +117,63 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
     fun removeCharacter(sprite: CharacterSprite) = removeActor(sprite)
 
     fun doFloatingNumber(healthDiff: Int, attacker: CharacterSprite, defender: CharacterSprite, heal: Boolean = false) {
-        val floatingNumber = FloatingNumber(healthDiff)
+        val floatingNumber = FloatingText(if (healthDiff > 0) abs(healthDiff).toString() else "+$healthDiff")
         addActor(floatingNumber)
         val attackVector = Direction.getRoughDirection(defender.coord.x - attacker.coord.x, defender.coord.y - attacker.coord.y)
-        floatingNumber.x = defender.x + 10
-        floatingNumber.y = defender.y + cellHeight / 2
         floatingNumber.color = if (heal) Color.GREEN else Color.RED
-        floatingNumber.addAction(Actions.parallel(
-                Actions.moveBy(40f * attackVector.deltaX, 40f * attackVector.deltaY, 2f),
-                Actions.fadeOut(2f),
-                Actions.scaleTo(1f, 1f, 2f)
-        ))
-        floatingNumber.addAction(Actions.after(Actions.removeActor()))
+        floatingNumber.finalize(attackVector, defender)
+        floatingNumber.float(attackVector)
     }
 
-    private class FloatingNumber(private val healthDiff: Int) : Actor() {
-        val font = BitmapFont()
+    fun doFloatingText(text: String, character: CharacterSprite) {
+        val floatingNumber = FloatingText(text)
+        addActor(floatingNumber)
+        floatingNumber.color = Color.GOLD
+        floatingNumber.finalize(Direction.DOWN, character) // TODO: Redo direction myself
+        floatingNumber.float(Direction.DOWN, 4f)
+    }
+
+    private class FloatingText(val text: String) : Actor() {
+        private val font = BitmapFont()
+        private lateinit var layout: GlyphLayout
 
         override fun draw(batch: Batch, parentAlpha: Float) {
             font.color = color
-            font.draw(batch, if (healthDiff > 0) abs(healthDiff).toString() else "+$healthDiff", x, y)
+            font.data.scaleX = scaleX
+            font.data.scaleY = scaleY
+            font.draw(batch, text, x, y)
+        }
+
+        fun float(direction: Direction, duration: Float = 2f) {
+            addAction(Actions.parallel(
+                    Actions.moveBy(40f * direction.deltaX, 40f * direction.deltaY, duration),
+                    Actions.fadeOut(duration),
+                    Actions.scaleTo(0.75f, 0.75f, duration)
+            ))
+            addAction(Actions.after(Actions.removeActor()))
+        }
+
+        fun finalize(direction: Direction, base: Actor) {
+            font.color = color
+            layout = GlyphLayout(font, text)
+
+            var x = base.x
+            var y = base.y
+
+            when {
+                direction.hasRight() -> x += cellWidth
+                direction.hasLeft() -> {}
+                else -> x += (cellWidth / 2) - (layout.width / 2)
+            }
+
+            when {
+                direction.hasDown() -> y += cellHeight
+                direction.hasUp() -> {}
+                else -> y += (cellHeight / 2)
+            }
+
+            this.x = x
+            this.y = y
         }
     }
 }

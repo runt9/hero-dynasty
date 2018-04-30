@@ -29,7 +29,7 @@ class DungeonMouseHandler(private val dungeon: Dungeon) : InputAdapter() {
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         if (dungeon.hasPendingMoves()) return false
 
-        val player = dungeon.player
+        val player = dungeon.playerSprite
         val newScreenX = (screenX + player.gridX - (gridWidth / 2)).toInt()
         val newScreenY = ((gridHeight - 1 - screenY) + player.gridY - (gridHeight / 2)).toInt()
 

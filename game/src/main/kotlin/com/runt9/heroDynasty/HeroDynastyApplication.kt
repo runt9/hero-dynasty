@@ -25,10 +25,11 @@ class HeroDynastyApplication : ApplicationAdapter() {
         dungeon.rebuildFov()
 
         input = SquidInput(DungeonKeyHandler(dungeon), SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, mouseHandler))
-        Gdx.input.inputProcessor = InputMultiplexer(dungeon.stage, input)
+        Gdx.input.inputProcessor = InputMultiplexer(dungeon.dungeonStage, dungeon.hud, input)
     }
 
     override fun resize(width: Int, height: Int) {
+        // TODO: Yeah resize basically doesn't work at all right now
         super.resize(width, height)
 
         val currentZoomX = width.toFloat() / gridWidth

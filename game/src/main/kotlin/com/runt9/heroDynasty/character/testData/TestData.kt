@@ -16,7 +16,7 @@ val testPlayer = run {
     return@run player
 }
 
-val testEnemies = (0 until 20).map {
+val testEnemies = (0 until 80).map {
     val powerLevel = when {
         it % 2 == 0 -> NpcPowerLevel.MINION
         it % 5 == 0 -> NpcPowerLevel.GUARD

@@ -18,4 +18,6 @@ class Inventory {
     var amulet: Item? = null
     var light: Item? = null
     var rune: Rune? = null
+
+    var gold = 0.0
 }

@@ -21,4 +21,10 @@ data class Resource(
             current = max
         }
     }
+
+    fun doRegen() {
+        if (current != max) {
+            current = Math.min(current + regen, max)
+        }
+    }
 }

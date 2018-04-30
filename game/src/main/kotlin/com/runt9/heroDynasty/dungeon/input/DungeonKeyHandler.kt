@@ -10,6 +10,7 @@ class DungeonKeyHandler(private val dungeon: Dungeon) : SquidInput.KeyHandler {
         var direction: Coord = Coord.get(0, 0)
 
         when (key) {
+            // TODO: Handle R for rest
             SquidInput.UP_ARROW -> direction = Coord.get(0, 1)
             SquidInput.DOWN_ARROW -> direction = Coord.get(0, -1)
             SquidInput.LEFT_ARROW -> direction = Coord.get(-1, 0)
