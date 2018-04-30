@@ -4,7 +4,7 @@ import com.runt9.heroDynasty.character.item.Inventory
 import com.runt9.heroDynasty.core.unarmedDamageRange
 import com.runt9.heroDynasty.util.clamp
 
-open class Character {
+abstract class Character(open val name: String) {
     val hitPoints = Resource()
     val isAlive get() = hitPoints.current > 0
     var level = 1

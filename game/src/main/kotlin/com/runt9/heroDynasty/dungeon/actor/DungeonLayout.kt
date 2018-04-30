@@ -20,6 +20,7 @@ import kotlin.math.abs
 class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Group() {
     private var animationCount = 0
     private val texturedDungeon: MutableMap<Coord, TextureAtlas.AtlasRegion>
+    internal var isbumping = false
     lateinit var visibleTiles: Array<DoubleArray>
     lateinit var seen: GreasedRegion
 
@@ -39,26 +40,29 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
     }
 
     // TODO: These functions are cool and all, but animations slow the game down a lot and complicate the code, are we sure we want them?
-    fun slide(character: CharacterSprite, newX: Int, newY: Int, duration: Float, callback: (() -> Unit)? = null) {
+    fun slide(character: CharacterSprite, newX: Int, newY: Int, callback: (() -> Unit)? = null) {
         animationCount++
-        character.addAction(Actions.sequence(
-                Actions.moveTo(newX * cellWidth, newY * cellWidth, duration),
-                Actions.delay(duration, Actions.run {
-                    --animationCount
-                    callback?.invoke()
-                })))
+        character.addAction(Actions.moveTo(newX * cellWidth, newY * cellWidth, 0.15f))
+        character.addAction(Actions.after(Actions.run {
+            --animationCount
+            callback?.invoke()
+        }))
     }
 
-    fun bump(character: CharacterSprite, direction: Direction, duration: Float, callback: (() -> Unit)? = null) {
+    fun bump(character: CharacterSprite, direction: Direction, callback: (() -> Unit)? = null) {
         animationCount++
+        isbumping = true
         character.addAction(Actions.sequence(
-                Actions.moveTo(character.x + direction.deltaX.toFloat() * 0.35f * cellWidth,
-                        character.y + direction.deltaY.toFloat() * 0.35f * cellHeight, duration * 0.15f),
-                Actions.moveTo(character.x, character.y, duration * 0.45f),
-                Actions.delay(duration, Actions.run {
-                    --animationCount
-                    callback?.invoke()
-                })))
+                Actions.moveTo(character.x + direction.deltaX.toFloat() * 0.15f * cellWidth,
+                        character.y + direction.deltaY.toFloat() * 0.15f * cellHeight, 0.05f),
+                Actions.moveTo(character.x, character.y, 0.05f)
+        ))
+
+        character.addAction(Actions.after(Actions.run {
+            --animationCount
+            isbumping = false
+            callback?.invoke()
+        }))
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {

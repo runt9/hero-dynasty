@@ -7,8 +7,8 @@ object AppConst {
 
     const val gridWidth = 50f
     const val gridHeight = 26f
-    const val bigWidth = gridWidth * 2
-    const val bigHeight = gridHeight * 2
+    const val dungeonWidth = 85f
+    const val dungeonHeight = 85f
     const val cellWidth = 32f
     const val cellHeight = 32f
     const val viewportWidth = gridWidth * cellWidth

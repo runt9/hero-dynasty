@@ -25,7 +25,7 @@ class HeroDynastyApplication : ApplicationAdapter() {
         dungeon.rebuildFov()
 
         input = SquidInput(DungeonKeyHandler(dungeon), SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, mouseHandler))
-        Gdx.input.inputProcessor = InputMultiplexer(dungeon.dungeonStage, dungeon.hud, input)
+        Gdx.input.inputProcessor = InputMultiplexer(dungeon.dungeonStage, dungeon.hudStage, input)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -43,8 +43,13 @@ class HeroDynastyApplication : ApplicationAdapter() {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        // TODO: Not sure I like this. With animations, this queues up inputs and processes them all in order
-        dungeon.handleMoves(input.hasNext()) { input.next() }
+        // If we're animating, eat extra input events so we don't queue up too much
+        if (dungeon.isAnimating) {
+            input.flush()
+        } else {
+            dungeon.handleMoves(input.hasNext()) { input.next() }
+        }
+
         dungeon.draw()
     }
 }

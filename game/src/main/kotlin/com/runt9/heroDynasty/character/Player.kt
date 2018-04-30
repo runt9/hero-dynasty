@@ -3,7 +3,7 @@ package com.runt9.heroDynasty.character
 import com.runt9.heroDynasty.character.race.Race
 import com.runt9.heroDynasty.core.random
 
-class Player(val race: Race) : Character() {
+class Player(val race: Race, override val name: String) : Character(name) {
     val resources = mutableListOf<Resource>()
     val attributes = race.attributes.copy() // Copy instead of clone so we don't taint the
 
@@ -47,7 +47,9 @@ class Player(val race: Race) : Character() {
         return levelledUp
     }
 
-    fun gainGold(gold: Pair<Double, Double>) {
-        inventory.gold += 10 * gold.random()
+    fun gainGold(gold: Pair<Double, Double>): Double {
+        val goldAdded = 10 * gold.random()
+        inventory.gold += goldAdded
+        return goldAdded
     }
 }

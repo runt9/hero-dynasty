@@ -1,5 +1,7 @@
 package com.runt9.heroDynasty.character
 
+fun MutableList<Double>.sumAsModifiers() = this.sum() - (this.size - 1)
+
 fun MutableMap<ModifierType, MutableList<Double>>.addModifier(type: ModifierType, value: Double) {
     if (this.containsKey(type)) {
         this[type]?.add(value)
@@ -45,7 +47,7 @@ enum class ModifierType {
     DODGE,
 
     // Resources
-    HIT_POINTS_PER_LEVEL,
+    HP_PER_LEVEL,
     STAMINA_PER_LEVEL,
     MANA_PER_LEVEL,
     RAGE_PER_LEVEL,

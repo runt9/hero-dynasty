@@ -11,13 +11,14 @@ import com.runt9.heroDynasty.core.basicAttack
 import com.runt9.heroDynasty.core.rng
 import com.runt9.heroDynasty.dungeon.actor.CharacterSprite
 import com.runt9.heroDynasty.dungeon.actor.DungeonLayout
-import com.runt9.heroDynasty.dungeon.actor.HudLayout
 import com.runt9.heroDynasty.dungeon.assets.AssetMapper
+import com.runt9.heroDynasty.dungeon.hud.HudLayout
 import com.runt9.heroDynasty.util.AppConst.baseFov
-import com.runt9.heroDynasty.util.AppConst.bigHeight
-import com.runt9.heroDynasty.util.AppConst.bigWidth
+import com.runt9.heroDynasty.util.AppConst.dungeonHeight
+import com.runt9.heroDynasty.util.AppConst.dungeonWidth
 import com.runt9.heroDynasty.util.AppConst.viewportHeight
 import com.runt9.heroDynasty.util.AppConst.viewportWidth
+import com.runt9.heroDynasty.util.toScale
 import squidpony.squidai.DijkstraMap
 import squidpony.squidgrid.Direction
 import squidpony.squidgrid.FOV
@@ -35,8 +36,8 @@ class Dungeon {
     val dungeonStage: Stage
     private val layout: DungeonLayout
 
-    val hud: Stage
-    private val hudLayout: HudLayout
+    val hudStage: Stage
+    private val hud: HudLayout
 
     internal val rawDungeon: Array<CharArray>
 
@@ -47,12 +48,13 @@ class Dungeon {
 
     private val pendingMoves = ArrayList<Coord>(200)
 
-    private var visibleTiles = Array(bigWidth.toInt(), { DoubleArray(bigHeight.toInt()) })
+    private var visibleTiles = Array(dungeonWidth.toInt(), { DoubleArray(dungeonHeight.toInt()) })
     private lateinit var blockage: GreasedRegion
-    internal lateinit var seen: GreasedRegion
+    private lateinit var seen: GreasedRegion
     lateinit var resetCursorPath: (Coord, GreasedRegion, Boolean) -> Unit
 
     private val getToPlayer: DijkstraMap
+    val isAnimating get() = layout.isAnimating()
 
     init {
         val assetMapper = AssetMapper()
@@ -73,9 +75,9 @@ class Dungeon {
         dungeonStage = Stage(StretchViewport(viewportWidth, viewportHeight), SpriteBatch())
         dungeonStage.addActor(layout)
 
-        hud = Stage(StretchViewport(viewportWidth, viewportHeight), SpriteBatch())
-        hudLayout = HudLayout(this)
-        hud.addActor(hudLayout)
+        hudStage = Stage(StretchViewport(viewportWidth, viewportHeight), SpriteBatch())
+        hud = HudLayout(this)
+        hudStage.addActor(hud)
 
         fov = FOV(FOV.RIPPLE)
     }
@@ -93,7 +95,7 @@ class Dungeon {
         blockage.fringe8way()
         resetCursorPath(playerSprite.coord, blockage, false)
         layout.updateVision(visibleTiles, seen)
-        hudLayout.updateMinimap(visibleTiles, seen)
+        hud.minimap.update(visibleTiles, seen)
     }
 
     fun queueNewMove(coord: Coord) = pendingMoves.add(Coord.get(playerSprite.gridX + coord.x, playerSprite.gridY + coord.y))
@@ -107,17 +109,23 @@ class Dungeon {
             xMod == 0 && yMod == 0 -> {} // no-op to skip turn
             rawDungeon[newX][newY] == '+' -> { // Open Door
                 layout.openDoor(newX, newY)
-                layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod), 0f) { rebuildFov() }
+                layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod)) { rebuildFov() }
             }
             enemies.containsKey(Coord.get(newX, newY)) -> { // Hit enemy
-                layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod), 0.1f) { rebuildFov() }
-                val damage = basicAttack(player, enemies[Coord.get(newX, newY)]!!.character)
+                val enemy = enemies[Coord.get(newX, newY)]!!
+                layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod)) { rebuildFov() }
+                val damage = basicAttack(player, enemy.character)
                 if (damage > 0.0) {
-                    layout.doFloatingNumber(damage.roundToInt(), playerSprite, enemies[Coord.get(newX, newY)]!!)
+                    layout.doFloatingNumber(damage.roundToInt(), playerSprite, enemy)
+                    // TODO: Debug roll info?
+                    // TODO: Crit info
+                    hud.combatLog.add("--> [GREEN]${player.name}[] hits [RED]${enemy.character.name}[] for [RED]${damage.toScale(2)}[] damage!")
+                } else {
+                    hud.combatLog.add("--> [GREEN]${player.name}[] misses [RED]${enemy.character.name}[].")
                 }
             }
-            newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight && rawDungeon[newX][newY] != '#' -> layout.slide(playerSprite, newX, newY, 0.03f) { rebuildFov() } // Move
-            else -> layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod), 0.1f)
+            newX >= 0 && newY >= 0 && newX < dungeonWidth && newY < dungeonHeight && rawDungeon[newX][newY] != '#' -> layout.slide(playerSprite, newX, newY) { rebuildFov() } // Move
+            else -> layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod))
         }
 
         phase = Phase.PLAYER_ANIM
@@ -137,6 +145,7 @@ class Dungeon {
                     Phase.ENEMY_ANIM -> {
                         phase = Phase.WAIT
                         player.hitPoints.doRegen()
+                        hud.combatLog.newTurn()
                         // TODO: Enemies regen too?
                     }
                     Phase.PLAYER_ANIM -> moveEnemies()
@@ -165,17 +174,26 @@ class Dungeon {
         }
 
         // TODO: Better place to kill since drops and stuff occur
+        // TODO: ArrayOutOfBoundsException
         enemies.forEach { coord, sprite ->
             if (coord != null && !sprite.character.isAlive) {
                 sprite.character as Npc
                 enemies.remove(coord)
                 layout.removeCharacter(sprite)
+
                 // TODO: Level above/below gives more/less xp
-                val levelledUp = player.gainExperience((sprite.character.level * 100 * sprite.character.powerLevel.xp).toInt())
+                val xp = (sprite.character.level * 100 * sprite.character.powerLevel.xp * rng.between(0.9, 1.2)).toInt() // Bit of randomness for XP
+                val gold = player.gainGold(sprite.character.powerLevel.gold)
+                val levelledUp = player.gainExperience(xp)
+
+                hud.combatLog.add("[GREEN]${player.name}[] killed [RED]${sprite.character.name}[] and gained [CYAN]$xp[] xp and [GOLD]${gold.toScale(2)}[] gold!")
+
                 if (levelledUp) {
                     layout.doFloatingText("Level Up!", playerSprite)
+                    hud.combatLog.add("[GREEN]${player.name}[] is now level [CYAN]${player.level}[]!")
                 }
-                player.gainGold(sprite.character.powerLevel.gold)
+
+                hud.hoverInfo.update(null)
             }
         }
     }
@@ -202,31 +220,48 @@ class Dungeon {
             enemyCoords.remove(coord)
             val tmp = nextMoves[0]
             if (tmp.x == playerCoord.x && tmp.y == playerCoord.y) {
-                layout.bump(enemy, Direction.getRoughDirection(tmp.x - coord.x, tmp.y - coord.y), 0.1f)
+                layout.bump(enemy, Direction.getRoughDirection(tmp.x - coord.x, tmp.y - coord.y))
 
+                // TODO: Sync with player attacks
                 val damage = basicAttack(enemy.character, player)
                 if (damage > 0.0) {
                     layout.doFloatingNumber(damage.roundToInt(), enemy, playerSprite)
+                    hud.combatLog.add("<-- [RED]${enemy.character.name}[] hits [GREEN]${player.name}[] for [RED]${damage.toScale(2)}[] damage!")
+                } else {
+                    hud.combatLog.add("<-- [RED]${enemy.character.name}[] misses [GREEN]${player.name}.")
                 }
 
                 enemyCoords.add(coord)
             } else {
                 enemies.alter(coord, tmp)
-                layout.slide(enemy, tmp.x, tmp.y, 0.03f)
+                layout.slide(enemy, tmp.x, tmp.y)
                 enemyCoords.add(tmp)
             }
         }
     }
 
     fun draw() {
-        dungeonStage.camera.position.x = playerSprite.x
-        dungeonStage.camera.position.y = playerSprite.y
+        if (!layout.isbumping) {
+            dungeonStage.camera.position.x = playerSprite.x
+            dungeonStage.camera.position.y = playerSprite.y
+        }
+
         dungeonStage.act()
         dungeonStage.viewport.apply(false)
         dungeonStage.draw()
 
-        hud.act()
-        hud.draw()
+        hudStage.act()
+        hudStage.draw()
+    }
+
+    fun showInfoForCursor(coord: Coord) {
+        val character = when {
+            playerSprite.coord == coord -> player
+            enemies.containsKey(coord) -> enemies[coord]!!.character
+            else -> null
+        }
+
+        hud.hoverInfo.update(character)
     }
 
     fun hasPendingMoves() = !pendingMoves.isEmpty()

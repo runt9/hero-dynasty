@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle
 import com.runt9.heroDynasty.character.Character
 import com.runt9.heroDynasty.character.Npc
-import com.runt9.heroDynasty.character.NpcPowerLevel
 import com.runt9.heroDynasty.core.getPixmapDrawable
 import com.runt9.heroDynasty.util.AppConst.cellHeight
 import com.runt9.heroDynasty.util.AppConst.cellWidth
@@ -30,7 +29,7 @@ class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val cha
         val progressBarStyle = ProgressBarStyle()
         progressBarStyle.background = getPixmapDrawable(3, cellHeight.toInt(), Color.RED)
         progressBarStyle.knob = getPixmapDrawable(3, 0, Color.GREEN)
-        progressBarStyle.knobBefore = getPixmapDrawable(3, cellHeight.toInt(), Color.GREEN)
+        progressBarStyle.knobBefore = getPixmapDrawable(3, cellHeight.toInt(), (character as? Npc)?.powerLevel?.color ?: Color.GREEN)
 
         val healthBar = ProgressBar(0.0f, character.hitPoints.max.toFloat(), 0.01f, true, progressBarStyle)
         healthBar.value = character.hitPoints.current.toFloat()
@@ -39,18 +38,7 @@ class CharacterSprite(private val sprite: TextureRegion, x: Int, y: Int, val cha
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
-        if (character is Npc) {
-            batch.color = when(character.powerLevel) {
-                NpcPowerLevel.CREATURE -> Color.WHITE
-                NpcPowerLevel.MINION -> Color.YELLOW
-                NpcPowerLevel.GUARD -> Color.BLUE
-                NpcPowerLevel.BOSS -> Color.CYAN
-                NpcPowerLevel.HERO -> Color.RED
-            }
-        } else {
-            batch.color = Color.WHITE
-        }
-
+        batch.color = Color.WHITE
         batch.draw(sprite, x, y, cellWidth, cellHeight)
 
         // TODO: Make own actor?

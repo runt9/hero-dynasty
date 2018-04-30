@@ -2,8 +2,8 @@ package com.runt9.heroDynasty.dungeon.input
 
 import com.badlogic.gdx.InputAdapter
 import com.runt9.heroDynasty.dungeon.Dungeon
-import com.runt9.heroDynasty.util.AppConst.bigHeight
-import com.runt9.heroDynasty.util.AppConst.bigWidth
+import com.runt9.heroDynasty.util.AppConst.dungeonHeight
+import com.runt9.heroDynasty.util.AppConst.dungeonWidth
 import com.runt9.heroDynasty.util.AppConst.gridHeight
 import com.runt9.heroDynasty.util.AppConst.gridWidth
 import squidpony.squidai.DijkstraMap
@@ -33,7 +33,7 @@ class DungeonMouseHandler(private val dungeon: Dungeon) : InputAdapter() {
         val newScreenX = (screenX + player.gridX - (gridWidth / 2)).toInt()
         val newScreenY = ((gridHeight - 1 - screenY) + player.gridY - (gridHeight / 2)).toInt()
 
-        if (newScreenX < 0 || newScreenY < 0 || newScreenX >= bigWidth || newScreenY >= bigHeight) {
+        if (newScreenX < 0 || newScreenY < 0 || newScreenX >= dungeonWidth || newScreenY >= dungeonHeight) {
             return false
         }
 
@@ -47,5 +47,14 @@ class DungeonMouseHandler(private val dungeon: Dungeon) : InputAdapter() {
         }
 
         return true
+    }
+
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+        val player = dungeon.playerSprite
+        val newScreenX = (screenX + player.gridX - (gridWidth / 2)).toInt()
+        val newScreenY = ((gridHeight - 1 - screenY) + player.gridY - (gridHeight / 2)).toInt()
+
+        dungeon.showInfoForCursor(Coord.get(newScreenX, newScreenY))
+        return false
     }
 }
