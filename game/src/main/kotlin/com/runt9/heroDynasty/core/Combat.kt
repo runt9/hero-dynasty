@@ -16,7 +16,7 @@ fun basicAttack(attacker: Character, defender: Character): Double {
     val dodge = defender.getModifier(ModifierType.DODGE)
 
     // Attack roll
-    val attackRollData = randomChanceReturningData(1 + (accuracy - dodge), accuracyClamp)
+    val attackRollData = randomChance(1 + (accuracy - dodge), accuracyClamp)
     if (!attackRollData.success) return 0.0
 
     // Damage roll

@@ -9,14 +9,13 @@ import kotlin.reflect.KClass
 val rng = RNG(LightRNG())
 const val baseChance = 50
 
-data class RandomChanceData(val rolledNumber: Double, val threshold: Double) {
+data class RandomChanceData(private val rolledNumber: Double, private val threshold: Double) {
     val success get() = rolledNumber < threshold
     val rollSuccessAmount get() = threshold - rolledNumber
 }
 
-fun randomChanceReturningData(multiplier: Double = 1.0, clampVal: Pair<Double, Double> = Pair(0.0, 100.0)) =
+fun randomChance(multiplier: Double = 1.0, clampVal: Pair<Double, Double> = Pair(0.0, 100.0)) =
         RandomChanceData(rng.nextDouble() * 100, clamp(baseChance * multiplier, clampVal))
-fun randomChance(multiplier: Double = 1.0, clampVal: Pair<Double, Double> = Pair(0.0, 100.0)) = randomChanceReturningData(multiplier, clampVal).success
 fun randomChance(threshold: Double) = rng.nextDouble() * 100 < threshold
 
 fun <T : Enum<*>> randomEnum(enum: KClass<T>): T = rng.getRandomElement(enum.java.enumConstants)

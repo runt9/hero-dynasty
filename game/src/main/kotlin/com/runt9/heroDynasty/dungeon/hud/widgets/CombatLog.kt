@@ -1,12 +1,13 @@
-package com.runt9.heroDynasty.dungeon.hud
+package com.runt9.heroDynasty.dungeon.hud.widgets
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.runt9.heroDynasty.core.getPixmapDrawable
+import com.runt9.heroDynasty.dungeon.assets.getFont
 
 
 // TODO: Find out if we need a maximum number of rows. Probably do because of memory
-class CombatLog(private val skin: Skin) : WidgetGroup() {
+class CombatLog(skin: Skin) : WidgetGroup() {
     private val container = Table()
     private val combatLog = Table()
     private var combatLogAdded = false
@@ -27,7 +28,7 @@ class CombatLog(private val skin: Skin) : WidgetGroup() {
 
     fun add(message: String) {
         combatLog.row()
-        val label = Label(message, skin)
+        val label = Label(message, Label.LabelStyle(getFont(12), Color.WHITE))
         label.setWrap(true)
         combatLog.add(label)
         combatLogAdded = true

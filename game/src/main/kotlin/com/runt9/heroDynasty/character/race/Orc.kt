@@ -10,5 +10,5 @@ class Orc : Race() {
     override val worldMapActionsPerTurn = 1
     override val skillPointsPerLevel = 2
     override val baseHitPointModifier = 1.6
-    override val attributes = Attributes(10, -3, 0, -2, -1)
+    override val attributes = Attributes(10, -3, -2, -1)
 }

@@ -1,4 +1,4 @@
-package com.runt9.heroDynasty.dungeon.hud
+package com.runt9.heroDynasty.dungeon.hud.widgets
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap

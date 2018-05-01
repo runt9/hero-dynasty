@@ -10,5 +10,5 @@ class Dwarf : Race() {
     override val worldMapActionsPerTurn = 2
     override val skillPointsPerLevel = 2
     override val baseHitPointModifier = 1.3
-    override val attributes = Attributes(5, 2, -2, -1, 0)
+    override val attributes = Attributes(5, 2, -1, 0)
 }

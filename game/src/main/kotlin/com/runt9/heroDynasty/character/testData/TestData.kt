@@ -12,6 +12,7 @@ val testPlayer = run {
     val player = Player(Human(), "runt9")
     player.inventory.primaryHand = BattleAxe()
     player.recalculateModifiers()
+    player.applyModifiers()
     player.addModifier(ModifierType.PHYSICAL_DAMAGE, 1.5)
     return@run player
 }

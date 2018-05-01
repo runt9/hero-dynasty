@@ -10,5 +10,5 @@ class Skeleton : Race() {
     override val worldMapActionsPerTurn = 1
     override val skillPointsPerLevel = 2
     override val baseHitPointModifier = 0.9
-    override val attributes = Attributes(4, -3, 0, -4, 2)
+    override val attributes = Attributes(4, -3, -4, 2)
 }

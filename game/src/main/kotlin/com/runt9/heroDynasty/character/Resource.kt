@@ -3,12 +3,17 @@ package com.runt9.heroDynasty.character
 // TODO: Constants?
 data class Resource(
         var current: Double = 0.0,
-        // TODO: Max calculated from base and modifiers
         var max: Double = 0.0,
-        var base: Double = 100.0,
-        var perLevel: Double = 10.0,
-        var regen: Double = 1.0
+        var base: Double = BASE,
+        var perLevel: Double = BASE_PER_LEVEL,
+        var regen: Double = BASE_REGEN
 ) {
+    companion object {
+        const val BASE: Double = 100.0
+        const val BASE_PER_LEVEL: Double = 10.0
+        const val BASE_REGEN: Double = 1.0
+    }
+
     fun recalculate(level: Int, addDifference: Boolean = true) {
         val oldMax = max
         max = base + perLevel * level

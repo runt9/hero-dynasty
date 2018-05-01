@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.runt9.heroDynasty.dungeon.Dungeon
+import com.runt9.heroDynasty.dungeon.hud.widgets.*
 import com.runt9.heroDynasty.util.AppConst.viewportHeight
 import com.runt9.heroDynasty.util.AppConst.viewportWidth
 

@@ -13,5 +13,5 @@ class Human : Race() {
     override val worldMapActionsPerTurn = 3
     override val skillPointsPerLevel = 4
     override val baseHitPointModifier = 1.0
-    override val attributes = Attributes(1, 3, 0, 6, 1)
+    override val attributes = Attributes(1, 3, 6, 1)
 }

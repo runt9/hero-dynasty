@@ -2,7 +2,6 @@ package com.runt9.heroDynasty.character.race
 
 import com.runt9.heroDynasty.character.attribute.Attributes
 
-// TODO: Refactor to builder DSL since it's all static data
 abstract class Race {
     abstract val name: String
     abstract val description: String

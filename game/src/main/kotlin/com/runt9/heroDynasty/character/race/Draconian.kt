@@ -10,5 +10,5 @@ class Draconian : Race() {
     override val worldMapActionsPerTurn = 3
     override val skillPointsPerLevel = 2
     override val baseHitPointModifier = 1.4
-    override val attributes = Attributes(2, 3, 8, -6, -4)
+    override val attributes = Attributes(2, 7, -6, -4)
 }

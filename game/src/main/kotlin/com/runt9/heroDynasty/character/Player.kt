@@ -2,18 +2,19 @@ package com.runt9.heroDynasty.character
 
 import com.runt9.heroDynasty.character.race.Race
 import com.runt9.heroDynasty.core.random
+import kotlin.math.roundToInt
 
 class Player(val race: Race, override val name: String) : Character(name) {
     val resources = mutableListOf<Resource>()
-    val attributes = race.attributes.copy() // Copy instead of clone so we don't taint the
-
-    // Morality
-    var goodness = 0.0
-    var consistency = 0.0
+    val attributes = race.attributes.copy() // Copy instead of clone so we don't taint the race
 
     var xp = 0
     var xpToNextLevel = calculateXpToNextLevel()
     var skillsPerLevel = race.skillPointsPerLevel
+    // TODO: Handle skill points spent to calculate current skill points on SPL change
+
+    var attributePoints = 6
+    var skillPoints = 2 + skillsPerLevel
 
     init {
         hitPoints.base = 100 * race.baseHitPointModifier
@@ -26,10 +27,10 @@ class Player(val race: Race, override val name: String) : Character(name) {
         level++
         xp = 0
         xpToNextLevel = calculateXpToNextLevel()
-        hitPoints.current = hitPoints.max // Heal to full on level up
         hitPoints.recalculate(level)
-
-        // TODO: Skills and attributes
+        hitPoints.current = hitPoints.max // Heal to full on level up
+        skillPoints += skillsPerLevel + (if (level % 5 == 0) 1 else 0)
+        attributePoints += 2 + (if (level % 5 == 0) 1 else 0)
     }
 
     fun gainExperience(xp: Int): Boolean {
@@ -48,8 +49,21 @@ class Player(val race: Race, override val name: String) : Character(name) {
     }
 
     fun gainGold(gold: Pair<Double, Double>): Double {
-        val goldAdded = 10 * gold.random()
+        val goldAdded = 10 * gold.random() * getModifier(ModifierType.GOLD_DROP)
         inventory.gold += goldAdded
         return goldAdded
+    }
+
+    override fun recalculateModifiers() {
+        super.recalculateModifiers()
+        addModifiers(attributes.getModifiers())
+    }
+
+    override fun applyModifiers(childCheck: ((Modifier) -> Unit)?) {
+        super.applyModifiers { mod ->
+            if (mod.type == ModifierType.SKILL_POINTS_PER_LEVEL) {
+                skillsPerLevel = (race.skillPointsPerLevel * mod.value).roundToInt()
+            }
+        }
     }
 }

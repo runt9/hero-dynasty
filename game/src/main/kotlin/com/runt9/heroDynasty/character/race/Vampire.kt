@@ -10,5 +10,5 @@ class Vampire : Race() {
     override val worldMapActionsPerTurn = 2
     override val skillPointsPerLevel = 3
     override val baseHitPointModifier = 1.1
-    override val attributes = Attributes(3, 1, 5, -1, -1)
+    override val attributes = Attributes(3, 1, -1, -1)
 }

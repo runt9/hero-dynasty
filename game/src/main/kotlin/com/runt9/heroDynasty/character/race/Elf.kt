@@ -10,5 +10,5 @@ class Elf : Race() {
     override val worldMapActionsPerTurn = 3
     override val skillPointsPerLevel = 3
     override val baseHitPointModifier = 0.9
-    override val attributes = Attributes(0, 4, 4, 3, 2)
+    override val attributes = Attributes(0, 4, 3, 2)
 }
