@@ -1,0 +1,1083 @@
+
+hero-dynasty.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+air_elemental
+  rotate: false
+  xy: 1, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+amulet
+  rotate: false
+  xy: 1, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ant
+  rotate: false
+  xy: 35, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+battleaxe_primary
+  rotate: false
+  xy: 1, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bear
+  rotate: false
+  xy: 35, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bee
+  rotate: false
+  xy: 69, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+bone_dragon
+  rotate: false
+  xy: 1, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+chest_closed
+  rotate: false
+  xy: 35, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+chest_open
+  rotate: false
+  xy: 69, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+closed_door
+  rotate: false
+  xy: 103, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cloth_body
+  rotate: false
+  xy: 1, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cloth_feet
+  rotate: false
+  xy: 35, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cloth_arms
+  rotate: false
+  xy: 69, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cloth_head
+  rotate: false
+  xy: 103, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cloth_legs
+  rotate: false
+  xy: 137, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+crossbow_primary
+  rotate: false
+  xy: 1, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+cyclops
+  rotate: false
+  xy: 35, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dagger_off
+  rotate: false
+  xy: 69, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dagger_primary
+  rotate: false
+  xy: 103, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dark_draconian
+  rotate: false
+  xy: 137, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+deathcap
+  rotate: false
+  xy: 171, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+death_knight
+  rotate: false
+  xy: 1, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+deep_water
+  rotate: false
+  xy: 35, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+deep_water
+  rotate: false
+  xy: 69, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+draconian
+  rotate: false
+  xy: 103, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dryad
+  rotate: false
+  xy: 137, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dwarf
+  rotate: false
+  xy: 171, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dwarf_berserker
+  rotate: false
+  xy: 205, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dwarf_fighter
+  rotate: false
+  xy: 1, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+earth_elemental
+  rotate: false
+  xy: 35, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf
+  rotate: false
+  xy: 69, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_blademaster
+  rotate: false
+  xy: 103, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_fighter
+  rotate: false
+  xy: 137, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+elf_sorcerer
+  rotate: false
+  xy: 171, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+faun
+  rotate: false
+  xy: 205, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+fire_elemental
+  rotate: false
+  xy: 239, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+fire_giant
+  rotate: false
+  xy: 1, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor
+  rotate: false
+  xy: 35, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+floor
+  rotate: false
+  xy: 69, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+floor
+  rotate: false
+  xy: 103, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+formicid
+  rotate: false
+  xy: 137, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+frost_giant
+  rotate: false
+  xy: 171, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+gargoyle
+  rotate: false
+  xy: 205, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ghost
+  rotate: false
+  xy: 239, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ghoul
+  rotate: false
+  xy: 273, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+goblin
+  rotate: false
+  xy: 1, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+gold_dragon
+  rotate: false
+  xy: 35, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+green_dragon
+  rotate: false
+  xy: 69, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+griffon
+  rotate: false
+  xy: 103, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+guardian_naga
+  rotate: false
+  xy: 137, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+halfling
+  rotate: false
+  xy: 171, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+handaxe_off
+  rotate: false
+  xy: 205, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+handaxe_primary
+  rotate: false
+  xy: 239, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hand_crossbow_off
+  rotate: false
+  xy: 273, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hand_crossbow_primary
+  rotate: false
+  xy: 307, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hell_hound
+  rotate: false
+  xy: 1, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hell_knight
+  rotate: false
+  xy: 35, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hobgoblin
+  rotate: false
+  xy: 69, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+human
+  rotate: false
+  xy: 103, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+human_enchantress
+  rotate: false
+  xy: 137, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hydra
+  rotate: false
+  xy: 171, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ice_devil
+  rotate: false
+  xy: 205, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+imp
+  rotate: false
+  xy: 239, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+iron_dragon
+  rotate: false
+  xy: 273, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+juggernaut
+  rotate: false
+  xy: 307, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+kobold
+  rotate: false
+  xy: 341, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+leather_body
+  rotate: false
+  xy: 1, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+leather_feet
+  rotate: false
+  xy: 35, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+leather_arms
+  rotate: false
+  xy: 69, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+leather_head
+  rotate: false
+  xy: 103, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+leather_legs
+  rotate: false
+  xy: 137, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+lich
+  rotate: false
+  xy: 171, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+longbow_primary
+  rotate: false
+  xy: 205, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+longsword_primary
+  rotate: false
+  xy: 239, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mace_off
+  rotate: false
+  xy: 273, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mace_primary
+  rotate: false
+  xy: 307, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mail_body
+  rotate: false
+  xy: 341, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mail_feet
+  rotate: false
+  xy: 375, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mail_arms
+  rotate: false
+  xy: 1, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mail_head
+  rotate: false
+  xy: 35, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mail_legs
+  rotate: false
+  xy: 69, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+manticore
+  rotate: false
+  xy: 103, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+minotaur
+  rotate: false
+  xy: 137, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mummy
+  rotate: false
+  xy: 171, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ogre
+  rotate: false
+  xy: 205, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+open_door
+  rotate: false
+  xy: 239, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+orc
+  rotate: false
+  xy: 273, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+orc_knight
+  rotate: false
+  xy: 307, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+orc_sorcerer
+  rotate: false
+  xy: 341, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+pike_primary
+  rotate: false
+  xy: 375, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+plate_body
+  rotate: false
+  xy: 409, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+plate_feet
+  rotate: false
+  xy: 1, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+plate_arms
+  rotate: false
+  xy: 35, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+plate_head
+  rotate: false
+  xy: 69, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+plate_legs
+  rotate: false
+  xy: 103, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+profane_servitor
+  rotate: false
+  xy: 137, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+quarterstaff_primary
+  rotate: false
+  xy: 171, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+quasit
+  rotate: false
+  xy: 205, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+quicksilver_dragon
+  rotate: false
+  xy: 239, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+rakshasa
+  rotate: false
+  xy: 273, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+rat
+  rotate: false
+  xy: 307, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+recurve_bow_primary
+  rotate: false
+  xy: 341, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ring
+  rotate: false
+  xy: 375, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+satyr
+  rotate: false
+  xy: 409, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+scorpion
+  rotate: false
+  xy: 443, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shadow
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shadow_demon
+  rotate: false
+  xy: 35, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shadow_dragon
+  rotate: false
+  xy: 69, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shallow_water
+  rotate: false
+  xy: 103, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+shallow_water
+  rotate: false
+  xy: 137, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+shield_off
+  rotate: false
+  xy: 171, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shield_primary
+  rotate: false
+  xy: 205, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shortsword_off
+  rotate: false
+  xy: 239, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+shortsword_primary
+  rotate: false
+  xy: 273, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+skeleton
+  rotate: false
+  xy: 307, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+snake
+  rotate: false
+  xy: 341, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+soul_eater
+  rotate: false
+  xy: 375, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+spear_off
+  rotate: false
+  xy: 409, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+spear_primary
+  rotate: false
+  xy: 443, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stone_giant
+  rotate: false
+  xy: 477, 477
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stone_stairs_down
+  rotate: false
+  xy: 35, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stone_stairs_up
+  rotate: false
+  xy: 69, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+storm_dragon
+  rotate: false
+  xy: 103, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+swamp_dragon
+  rotate: false
+  xy: 137, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tengu
+  rotate: false
+  xy: 171, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tengu_conjurer
+  rotate: false
+  xy: 205, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tengu_reaver
+  rotate: false
+  xy: 239, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tengu_warrior
+  rotate: false
+  xy: 273, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+treant
+  rotate: false
+  xy: 307, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+troll
+  rotate: false
+  xy: 341, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+vampire
+  rotate: false
+  xy: 375, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+vampire_knight
+  rotate: false
+  xy: 409, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+vampire_mage
+  rotate: false
+  xy: 443, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+vine_stalker
+  rotate: false
+  xy: 477, 443
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+wall
+  rotate: false
+  xy: 69, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 0
+wall
+  rotate: false
+  xy: 103, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+wall
+  rotate: false
+  xy: 137, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 10
+wall
+  rotate: false
+  xy: 171, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 11
+wall
+  rotate: false
+  xy: 205, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+wall
+  rotate: false
+  xy: 239, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+wall
+  rotate: false
+  xy: 273, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+wall
+  rotate: false
+  xy: 307, 239
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+wall
+  rotate: false
+  xy: 341, 273
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6
+wall
+  rotate: false
+  xy: 375, 307
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 7
+wall
+  rotate: false
+  xy: 409, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 8
+wall
+  rotate: false
+  xy: 443, 375
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 9
+warhammer_primary
+  rotate: false
+  xy: 477, 409
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+water_elemental
+  rotate: false
+  xy: 103, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+wolf
+  rotate: false
+  xy: 137, 35
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+wraith
+  rotate: false
+  xy: 171, 69
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+wyvern
+  rotate: false
+  xy: 205, 103
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+zombie
+  rotate: false
+  xy: 239, 137
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+zombie_ogre
+  rotate: false
+  xy: 273, 171
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+zombie_rat
+  rotate: false
+  xy: 307, 205
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

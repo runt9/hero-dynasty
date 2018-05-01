@@ -7,7 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
-import com.runt9.heroDynasty.character.*
+import com.runt9.heroDynasty.character.Character
+import com.runt9.heroDynasty.character.ModifierCategory
+import com.runt9.heroDynasty.character.categorize
+import com.runt9.heroDynasty.character.groupByType
+import com.runt9.heroDynasty.character.npc.Npc
 import com.runt9.heroDynasty.core.getPixmapDrawable
 import com.runt9.heroDynasty.dungeon.assets.getFont
 import com.runt9.heroDynasty.util.humanReadable
@@ -44,7 +48,7 @@ class HoverInfo(private val skin: Skin) : WidgetGroup() {
         if (character is Npc) {
             infoPanel.row()
             infoPanel.add(Label("Enemy:", style))
-            infoPanel.add(Label("[#${character.powerLevel.color}]${character.powerLevel.humanReadable()}[]", style))
+            infoPanel.add(Label("[#${character.powerLevel.color}]${character.powerLevel.name.humanReadable()}[]", style))
         }
 
         infoPanel.row()
@@ -52,19 +56,19 @@ class HoverInfo(private val skin: Skin) : WidgetGroup() {
         infoPanel.add(Label(character.level.toString(), style))
         infoPanel.row()
         infoPanel.add(Label("HP:", style))
-        infoPanel.add(Label("${character.hitPoints.current.toScale(2)} / ${character.hitPoints.max}", style))
+        infoPanel.add(Label("${character.hitPoints.current.toScale(2)} / ${character.hitPoints.max.toScale(2)}", style))
 
         character.modifiers.categorize(ModifierCategory.ATTACK, ModifierCategory.DAMAGE, ModifierCategory.DEFENSE,
                 ModifierCategory.RESISTANCE, ModifierCategory.CRIT, ModifierCategory.SPEED, ModifierCategory.RESOURCE_REGEN
         ).toSortedMap(compareBy { it.name }).forEach { category, modifiers ->
             infoPanel.row()
-            infoPanel.add(Label("${category.humanReadable()}:", style))
+            infoPanel.add(Label("${category.name.humanReadable()}:", style))
 
             modifiers.groupByType().forEach { (type, sum) ->
                 infoPanel.row()
                 val smallStyle = LabelStyle(getFont(12), Color.WHITE)
 
-                val typeLabel = Label(" - ${type.humanReadable()}:", smallStyle)
+                val typeLabel = Label(" - ${type.name.humanReadable()}:", smallStyle)
                 infoPanel.add(typeLabel)
                 val modifierLabel = Label("${sum.toScale(2)}x", smallStyle)
                 infoPanel.add(modifierLabel)

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.runt9.heroDynasty.character.Character
 import com.runt9.heroDynasty.core.rng
+import com.runt9.heroDynasty.dungeon.assets.AssetMapper
 import com.runt9.heroDynasty.util.AppConst.cellHeight
 import com.runt9.heroDynasty.util.AppConst.cellWidth
 import squidpony.squidgrid.Direction
@@ -17,7 +18,7 @@ import squidpony.squidmath.GreasedRegion
 import kotlin.math.abs
 
 // TODO: FloatingText needs some refactoring
-class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>) : Group() {
+class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap: Map<Char, List<AtlasRegion>>, private val assetMapper: AssetMapper) : Group() {
     private var animationCount = 0
     private val texturedDungeon: MutableMap<Coord, TextureAtlas.AtlasRegion>
     internal var isbumping = false
@@ -34,7 +35,7 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
     fun isAnimating() = animationCount > 0
 
     fun addCharacter(sprite: TextureRegion, coordinates: Coord, character: Character): CharacterSprite {
-        val characterSprite = CharacterSprite(sprite, coordinates.x, coordinates.y, character)
+        val characterSprite = CharacterSprite(sprite, coordinates.x, coordinates.y, character, assetMapper)
         addActor(characterSprite)
         return characterSprite
     }

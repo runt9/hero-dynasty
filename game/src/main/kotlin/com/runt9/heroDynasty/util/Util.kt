@@ -13,4 +13,5 @@ fun <T : Comparable<T>> clamp(value: T, min: T, max: T): T {
 }
 
 fun Double.toScale(scale: Int) = BigDecimal(this).setScale(scale, BigDecimal.ROUND_HALF_UP).toDouble()
-fun Enum<*>.humanReadable() = WordUtils.capitalize(this.name.replace("_", " ").toLowerCase())!!
+fun String.humanReadable() = WordUtils.capitalize(this.replace("_", " ").toLowerCase())!!
+fun String.toAssetName(): String = this.replace(" ", "_").replace("(.)(\\p{Upper})", "$1_$2").toLowerCase()

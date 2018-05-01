@@ -1,4 +1,8 @@
-package com.runt9.heroDynasty.character
+package com.runt9.heroDynasty.character.npc
+
+import com.runt9.heroDynasty.character.Character
+import com.runt9.heroDynasty.character.Modifier
+import com.runt9.heroDynasty.character.ModifierType
 
 class Npc(val powerLevel: NpcPowerLevel, override val name: String) : Character(name) {
     init {

@@ -3,8 +3,8 @@ package com.runt9.heroDynasty.dungeon
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.runt9.heroDynasty.character.Npc
 import com.runt9.heroDynasty.character.Player
+import com.runt9.heroDynasty.character.npc.Npc
 import com.runt9.heroDynasty.character.testData.testEnemies
 import com.runt9.heroDynasty.character.testData.testPlayer
 import com.runt9.heroDynasty.core.basicAttack
@@ -18,6 +18,7 @@ import com.runt9.heroDynasty.util.AppConst.dungeonHeight
 import com.runt9.heroDynasty.util.AppConst.dungeonWidth
 import com.runt9.heroDynasty.util.AppConst.viewportHeight
 import com.runt9.heroDynasty.util.AppConst.viewportWidth
+import com.runt9.heroDynasty.util.toAssetName
 import com.runt9.heroDynasty.util.toScale
 import squidpony.squidai.DijkstraMap
 import squidpony.squidgrid.Direction
@@ -60,15 +61,15 @@ class Dungeon {
         val assetMapper = AssetMapper()
 
         rawDungeon = DungeonGenerator().generateDungeon()
-        layout = DungeonLayout(rawDungeon, assetMapper.getAssetMap())
+        layout = DungeonLayout(rawDungeon, assetMapper.getAssetMap(), assetMapper)
         val floors = GreasedRegion(rawDungeon, '.')
         val playerCoord = floors.singleRandom(rng)
-        playerSprite = layout.addCharacter(assetMapper.getCharacter(), playerCoord, player)
+        playerSprite = layout.addCharacter(assetMapper.getRegion(player.race.name.toAssetName()), playerCoord, player)
         floors.remove(element = playerCoord)
         testEnemies.forEach {
             val enemyCoord = floors.singleRandom(rng)
             floors.remove(element = enemyCoord)
-            enemies[enemyCoord] = layout.addCharacter(assetMapper.getEnemy(), enemyCoord, it)
+            enemies[enemyCoord] = layout.addCharacter(assetMapper.getRegion(it.name.toAssetName()), enemyCoord, it)
         }
         getToPlayer = DijkstraMap(rawDungeon, DijkstraMap.Measurement.EUCLIDEAN)
 
