@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.runt9.heroDynasty.character.Player
 import com.runt9.heroDynasty.dungeon.Dungeon
+import com.runt9.heroDynasty.dungeon.hud.menu.CharacterSheet
+import com.runt9.heroDynasty.dungeon.hud.menu.PauseMenu
 import com.runt9.heroDynasty.dungeon.hud.widgets.*
 import com.runt9.heroDynasty.util.AppConst.viewportHeight
 import com.runt9.heroDynasty.util.AppConst.viewportWidth
@@ -15,12 +18,17 @@ class HudLayout(dungeon: Dungeon) : Group() {
     private val player = dungeon.player
     private val skin = Skin(Gdx.files.internal("uiskin.json"))
 
+    // Hud Widgets
     private val hotBar = HotBar()
     private val healthBar = HealthBar(player)
     private val infoPanel = InfoPanel(skin, player)
     internal val minimap = Minimap(dungeon.rawDungeon, dungeon.playerSprite, dungeon.enemies)
     internal val combatLog = CombatLog(skin)
     internal val hoverInfo = HoverInfo()
+
+    // Menus
+    private lateinit var pauseMenu: PauseMenu
+    private lateinit var characterSheet: CharacterSheet
 
     init {
         skin.get("default-font", BitmapFont::class.java).data.markupEnabled = true
@@ -50,5 +58,23 @@ class HudLayout(dungeon: Dungeon) : Group() {
 
         hoverInfo.x = viewportWidth - 256f
         hoverInfo.y = viewportHeight - 512f
+    }
+
+    fun showPauseMenu() {
+        if (!::pauseMenu.isInitialized) {
+            pauseMenu = PauseMenu(skin)
+            addActor(pauseMenu)
+        }
+
+        pauseMenu.show(stage)
+    }
+
+    fun showCharacterSheet(player: Player) {
+        if (!::characterSheet.isInitialized) {
+            characterSheet = CharacterSheet(skin, player)
+            addActor(characterSheet)
+        }
+
+        characterSheet.show(stage)
     }
 }

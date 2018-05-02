@@ -19,4 +19,11 @@ class Attributes(physical: Int, mental: Int, social: Int, luck: Int) {
 
         return modifiers
     }
+
+    fun forEach(loop: (Attribute) -> Unit) {
+        loop(physical)
+        loop(mental)
+        loop(social)
+        loop(luck)
+    }
 }

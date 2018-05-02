@@ -297,4 +297,9 @@ class Dungeon {
     fun isVisible(x: Int, y: Int) = visibleTiles[x][y] > 0.0
     fun isVisible(coord: Coord) = isVisible(coord.x, coord.y)
     private fun enemiesVisible() = enemies.any { isVisible(it.key) }
+
+    fun pauseMenu() = hud.showPauseMenu()
+    fun characterSheet() {
+        hud.showCharacterSheet(player)
+    }
 }

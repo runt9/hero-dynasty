@@ -7,11 +7,14 @@ fun List<Modifier>.sum(vararg types: ModifierType): Double {
     return if (filtered.isEmpty()) 1.0 else filtered.sumByDouble { it.value } - (filtered.size - 1)
 }
 
-fun List<Modifier>.categorize(vararg categories: ModifierCategory): Map<ModifierCategory, List<Modifier>> =
-        this.filter { categories.contains(it.type.category) }.groupBy { it.type.category }
+fun List<Modifier>.categorize(vararg categories: ModifierCategory) = when {
+    categories.isEmpty() -> this.groupBy { it.type.category }
+    else -> this.filter { categories.contains(it.type.category) }.groupBy { it.type.category }
+}
 
 fun List<Modifier>.groupByType(): List<Modifier> = this.groupBy { it.type }.map { Modifier(it.key, it.value.sum()) }
 
+// TODO: Modifier source for tooltip display
 data class Modifier(val type: ModifierType, val value: Double)
 
 enum class ModifierCategory {

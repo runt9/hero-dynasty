@@ -69,10 +69,8 @@ class HoverInfo : WidgetGroup() {
                 infoPanel.row()
                 val smallStyle = LabelStyle(getFont(12), Color.WHITE)
 
-                val typeLabel = Label(" - ${type.displayName}:", smallStyle)
-                infoPanel.add(typeLabel)
-                val modifierLabel = Label("${sum.toScale(2)}x", smallStyle)
-                infoPanel.add(modifierLabel)
+                infoPanel.add(Label(" - ${type.displayName}:", smallStyle))
+                infoPanel.add(Label("${sum.toScale(2)}x", smallStyle))
             }
         }
     }
