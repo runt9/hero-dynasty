@@ -20,7 +20,7 @@ class HudLayout(dungeon: Dungeon) : Group() {
     private val infoPanel = InfoPanel(skin, player)
     internal val minimap = Minimap(dungeon.rawDungeon, dungeon.playerSprite, dungeon.enemies)
     internal val combatLog = CombatLog(skin)
-    internal val hoverInfo = HoverInfo(skin)
+    internal val hoverInfo = HoverInfo()
 
     init {
         skin.get("default-font", BitmapFont::class.java).data.markupEnabled = true

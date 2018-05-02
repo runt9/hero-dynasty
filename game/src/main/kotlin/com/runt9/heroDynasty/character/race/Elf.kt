@@ -3,7 +3,6 @@ package com.runt9.heroDynasty.character.race
 import com.runt9.heroDynasty.character.attribute.Attributes
 
 class Elf : Race() {
-    override val name = "Elf"
     override val description = """
     """.trimIndent()
 

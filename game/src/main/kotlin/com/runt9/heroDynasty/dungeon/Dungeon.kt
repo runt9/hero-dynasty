@@ -3,11 +3,14 @@ package com.runt9.heroDynasty.dungeon
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.runt9.heroDynasty.character.ModifierType
 import com.runt9.heroDynasty.character.Player
 import com.runt9.heroDynasty.character.npc.Npc
 import com.runt9.heroDynasty.character.testData.testEnemies
 import com.runt9.heroDynasty.character.testData.testPlayer
 import com.runt9.heroDynasty.core.basicAttack
+import com.runt9.heroDynasty.core.randomChance
+import com.runt9.heroDynasty.core.randomItem
 import com.runt9.heroDynasty.core.rng
 import com.runt9.heroDynasty.dungeon.actor.CharacterSprite
 import com.runt9.heroDynasty.dungeon.actor.DungeonLayout
@@ -30,8 +33,10 @@ import squidpony.squidmath.GreasedRegion
 import squidpony.squidmath.OrderedMap
 import kotlin.math.roundToInt
 
+// TODO: Needs some refactoring
 class Dungeon {
     enum class Phase { WAIT, PLAYER_ANIM, ENEMY_ANIM }
+
     var phase = Phase.WAIT
 
     val dungeonStage: Stage
@@ -64,7 +69,7 @@ class Dungeon {
         layout = DungeonLayout(rawDungeon, assetMapper.getAssetMap(), assetMapper)
         val floors = GreasedRegion(rawDungeon, '.')
         val playerCoord = floors.singleRandom(rng)
-        playerSprite = layout.addCharacter(assetMapper.getRegion(player.race.name.toAssetName()), playerCoord, player)
+        playerSprite = layout.addCharacter(assetMapper.getRegion(player.race::class.simpleName!!.toAssetName()), playerCoord, player)
         floors.remove(element = playerCoord)
         testEnemies.forEach {
             val enemyCoord = floors.singleRandom(rng)
@@ -107,24 +112,13 @@ class Dungeon {
 
         // Probably a better place for this stuff
         when {
-            xMod == 0 && yMod == 0 -> {} // no-op to skip turn
+            xMod == 0 && yMod == 0 -> {
+            } // no-op to skip turn
             rawDungeon[newX][newY] == '+' -> { // Open Door
                 layout.openDoor(newX, newY)
                 layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod)) { rebuildFov() }
             }
-            enemies.containsKey(Coord.get(newX, newY)) -> { // Hit enemy
-                val enemy = enemies[Coord.get(newX, newY)]!!
-                layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod)) { rebuildFov() }
-                val damage = basicAttack(player, enemy.character)
-                if (damage > 0.0) {
-                    layout.doFloatingNumber(damage.roundToInt(), playerSprite, enemy)
-                    // TODO: Debug roll info?
-                    // TODO: Crit info
-                    hud.combatLog.add("--> [GREEN]${player.name}[] hits [RED]${enemy.character.name}[] for [RED]${damage.toScale(2)}[] damage!")
-                } else {
-                    hud.combatLog.add("--> [GREEN]${player.name}[] misses [RED]${enemy.character.name}[].")
-                }
-            }
+            enemies.containsKey(Coord.get(newX, newY)) -> attack(playerSprite, enemies[Coord.get(newX, newY)]!!)
             newX >= 0 && newY >= 0 && newX < dungeonWidth && newY < dungeonHeight && rawDungeon[newX][newY] != '#' -> layout.slide(playerSprite, newX, newY) { rebuildFov() } // Move
             else -> layout.bump(playerSprite, Direction.getRoughDirection(xMod, yMod))
         }
@@ -142,7 +136,7 @@ class Dungeon {
                 nextCb()
             } else {
                 when (phase) {
-                    // New turn?
+                // New turn?
                     Phase.ENEMY_ANIM -> {
                         phase = Phase.WAIT
                         player.hitPoints.doRegen()
@@ -150,7 +144,8 @@ class Dungeon {
                         // TODO: Enemies regen too?
                     }
                     Phase.PLAYER_ANIM -> moveEnemies()
-                    Dungeon.Phase.WAIT -> {}
+                    Dungeon.Phase.WAIT -> {
+                    }
                 }
             }
             return
@@ -186,6 +181,7 @@ class Dungeon {
                 val xp = (sprite.character.level * 100 * sprite.character.powerLevel.xp * rng.between(0.9, 1.2)).toInt() // Bit of randomness for XP
                 val gold = player.gainGold(sprite.character.powerLevel.gold)
                 val levelledUp = player.gainExperience(xp)
+                dropItems(sprite.character)
 
                 hud.combatLog.add("[GREEN]${player.name}[] killed [RED]${sprite.character.name}[] and gained [CYAN]$xp[] xp and [GOLD]${gold.toScale(2)}[] gold!")
 
@@ -194,8 +190,28 @@ class Dungeon {
                     hud.combatLog.add("[GREEN]${player.name}[] is now level [CYAN]${player.level}[]!")
                 }
 
-                hud.hoverInfo.update(null)
+                if (hud.hoverInfo.isCharacter(sprite.character)) {
+                    hud.hoverInfo.update(null)
+                }
             }
+        }
+    }
+
+    // TODO: Chest drops
+    private fun dropItems(enemy: Npc, baseChance: Int = 50) {
+        var chance = baseChance * enemy.powerLevel.itemDrop
+        for (i in 0..3) { // Max 3 items
+            if (!randomChance(baseChance = chance, multiplier = player.getModifier(ModifierType.DROP_CHANCE)).success) {
+                break
+            }
+
+            val item = randomItem()
+            item.rollStats(player.getModifier(ModifierType.RARITY_FIND), chance)
+            player.itemVault.add(item)
+
+            val color = item.rarity.color
+            hud.combatLog.add("[GREEN]${player.name}[] found [#$color]${item.getName()}[]!")
+            chance /= 2
         }
     }
 
@@ -221,17 +237,7 @@ class Dungeon {
             enemyCoords.remove(coord)
             val tmp = nextMoves[0]
             if (tmp.x == playerCoord.x && tmp.y == playerCoord.y) {
-                layout.bump(enemy, Direction.getRoughDirection(tmp.x - coord.x, tmp.y - coord.y))
-
-                // TODO: Sync with player attacks
-                val damage = basicAttack(enemy.character, player)
-                if (damage > 0.0) {
-                    layout.doFloatingNumber(damage.roundToInt(), enemy, playerSprite)
-                    hud.combatLog.add("<-- [RED]${enemy.character.name}[] hits [GREEN]${player.name}[] for [RED]${damage.toScale(2)}[] damage!")
-                } else {
-                    hud.combatLog.add("<-- [RED]${enemy.character.name}[] misses [GREEN]${player.name}.")
-                }
-
+                attack(enemy, playerSprite)
                 enemyCoords.add(coord)
             } else {
                 enemies.alter(coord, tmp)
@@ -265,8 +271,29 @@ class Dungeon {
         hud.hoverInfo.update(character)
     }
 
-    fun hasPendingMoves() = !pendingMoves.isEmpty()
-    fun moveTo(path: List<Coord>) = pendingMoves.addAll(path)
+    fun moveTo(path: List<Coord>) {
+        // TODO: Proper line of sight!
+        if (enemies.containsKey(path.last()) && player.inventory.primaryHand != null && player.inventory.primaryHand!!.range >= path.size) {
+            pendingMoves.add(path.last())
+        } else {
+            pendingMoves.addAll(path)
+        }
+    }
+
+    private fun attack(attacker: CharacterSprite, defender: CharacterSprite) {
+        layout.bump(attacker, Direction.getRoughDirection(defender.gridX - attacker.gridX, defender.gridY - attacker.gridY))
+        val damage = basicAttack(attacker.character, defender.character)
+        if (damage > 0.0) {
+            layout.doFloatingNumber(damage.roundToInt(), attacker, defender)
+            // TODO: Debug roll info?
+            // TODO: Crit info
+            hud.combatLog.add("${attacker.character.name} [RED]hits[] ${defender.character.name} for [RED]${damage.toScale(2)}[] damage!")
+        } else {
+            hud.combatLog.add("${attacker.character.name} [GRAY]misses[] ${defender.character.name}.")
+        }
+    }
+
+    fun hasPendingMoves() = pendingMoves.isNotEmpty()
     fun isVisible(x: Int, y: Int) = visibleTiles[x][y] > 0.0
     fun isVisible(coord: Coord) = isVisible(coord.x, coord.y)
     private fun enemiesVisible() = enemies.any { isVisible(it.key) }

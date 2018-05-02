@@ -1,5 +1,6 @@
 package com.runt9.heroDynasty.character
 
+import com.runt9.heroDynasty.character.item.Item
 import com.runt9.heroDynasty.character.race.Race
 import com.runt9.heroDynasty.core.random
 import kotlin.math.roundToInt
@@ -15,6 +16,8 @@ class Player(val race: Race, override val name: String) : Character(name) {
 
     var attributePoints = 6
     var skillPoints = 2 + skillsPerLevel
+
+    val itemVault = mutableListOf<Item>() // TODO: This will be part of the faction
 
     init {
         hitPoints.base = 100 * race.baseHitPointModifier

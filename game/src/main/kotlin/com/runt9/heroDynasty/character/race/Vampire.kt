@@ -3,7 +3,6 @@ package com.runt9.heroDynasty.character.race
 import com.runt9.heroDynasty.character.attribute.Attributes
 
 class Vampire : Race() {
-    override val name = "Vampire"
     override val description = """
     """.trimIndent()
 

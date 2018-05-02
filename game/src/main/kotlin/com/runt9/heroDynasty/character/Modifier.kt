@@ -18,7 +18,7 @@ enum class ModifierCategory {
     ATTACK,
     DAMAGE,
     DEFENSE,
-    RESISTANCE,
+    INCOMING_DAMAGE,
     CRIT,
     SPEED,
     RESOURCE_POOL,
@@ -27,58 +27,52 @@ enum class ModifierCategory {
     CHARACTER
 }
 
-enum class ModifierType(val category: ModifierCategory) {
+enum class ModifierType(val category: ModifierCategory, val displayName: String) {
     // Damage
-    ALL_DAMAGE(ModifierCategory.DAMAGE),
-    SPELL_DAMAGE(ModifierCategory.DAMAGE),
-    PHYSICAL_DAMAGE(ModifierCategory.DAMAGE),
-    MENTAL_DAMAGE(ModifierCategory.DAMAGE),
-    POISON_DAMAGE(ModifierCategory.DAMAGE),
-    FIRE_DAMAGE(ModifierCategory.DAMAGE),
-    COLD_DAMAGE(ModifierCategory.DAMAGE),
-    ENERGY_DAMAGE(ModifierCategory.DAMAGE),
-    LIGHT_DAMAGE(ModifierCategory.DAMAGE),
-    DARK_DAMAGE(ModifierCategory.DAMAGE),
+    ALL_DAMAGE(ModifierCategory.DAMAGE, "All"),
+    SPELL_DAMAGE(ModifierCategory.DAMAGE, "Spell"),
+    PHYSICAL_DAMAGE(ModifierCategory.DAMAGE, "Physical"),
+    MENTAL_DAMAGE(ModifierCategory.DAMAGE, "Mental"),
+    POISON_DAMAGE(ModifierCategory.DAMAGE, "Poison"),
+    FIRE_DAMAGE(ModifierCategory.DAMAGE, "Fire"),
+    COLD_DAMAGE(ModifierCategory.DAMAGE, "Cold"),
+    ENERGY_DAMAGE(ModifierCategory.DAMAGE, "Energy"),
+    LIGHT_DAMAGE(ModifierCategory.DAMAGE, "Light"),
+    DARK_DAMAGE(ModifierCategory.DAMAGE, "Dark"),
 
     // NB: Probably will end up wanting one for each damage type, but let's go with this for now
-    INCOMING_DAMAGE_PENETRATION(ModifierCategory.DAMAGE),
+    INCOMING_DAMAGE_PENETRATION(ModifierCategory.DAMAGE, "Penetration"),
 
     // Damage Reduction
-    INCOMING_ALL_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_PHYSICAL_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_MENTAL_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_POISON_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_FIRE_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_COLD_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_ENERGY_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_LIGHT_DAMAGE(ModifierCategory.RESISTANCE),
-    INCOMING_DARK_DAMAGE(ModifierCategory.RESISTANCE),
+    INCOMING_ALL_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "All"),
+    INCOMING_PHYSICAL_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Physical"),
+    INCOMING_MENTAL_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Mental"),
+    INCOMING_POISON_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Poison"),
+    INCOMING_FIRE_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Fire"),
+    INCOMING_COLD_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Cold"),
+    INCOMING_ENERGY_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Energy"),
+    INCOMING_LIGHT_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Light"),
+    INCOMING_DARK_DAMAGE(ModifierCategory.INCOMING_DAMAGE, "Dark"),
 
     // TODO: Spell/ability effectiveness?
 
     // Crit
-    CRIT_CHANCE(ModifierCategory.CRIT),
-    CRIT_DAMAGE(ModifierCategory.CRIT),
+    CRIT_CHANCE(ModifierCategory.CRIT, "Crit Chance"),
+    CRIT_DAMAGE(ModifierCategory.CRIT, "Crit Damage"),
 
-    ACTION_COST(ModifierCategory.SPEED),
-    DODGE(ModifierCategory.DEFENSE),
+    ACTION_COST(ModifierCategory.SPEED, "Action Cost"),
+    DODGE(ModifierCategory.DEFENSE, "Dodge Chance"),
 
     // Resources
-    HP_PER_LEVEL(ModifierCategory.RESOURCE_POOL),
-    STAMINA_PER_LEVEL(ModifierCategory.RESOURCE_POOL),
-    MANA_PER_LEVEL(ModifierCategory.RESOURCE_POOL),
-    RAGE_PER_LEVEL(ModifierCategory.RESOURCE_POOL),
-    HP_REGEN(ModifierCategory.RESOURCE_REGEN),
-    STAMINA_REGEN(ModifierCategory.RESOURCE_REGEN),
-    MANA_REGEN(ModifierCategory.RESOURCE_REGEN),
-    RAGE_GEN(ModifierCategory.RESOURCE_REGEN),
+    HP_PER_LEVEL(ModifierCategory.RESOURCE_POOL, "HP / lvl"),
+    HP_REGEN(ModifierCategory.RESOURCE_REGEN, "HP Regen"),
 
-    ACCURACY(ModifierCategory.ATTACK),
-    SKILL_POINTS_PER_LEVEL(ModifierCategory.CHARACTER),
-    COOLDOWN(ModifierCategory.SPEED),
-    OFF_HAND(ModifierCategory.ATTACK),
+    ACCURACY(ModifierCategory.ATTACK, "Accuracy"),
+    SKILL_POINTS_PER_LEVEL(ModifierCategory.CHARACTER, "Skills per Level"),
+    COOLDOWN(ModifierCategory.SPEED, "Cooldowns"),
 
     // Luck
-    RARITY_FIND(ModifierCategory.LUCK),
-    GOLD_DROP(ModifierCategory.LUCK)
+    RARITY_FIND(ModifierCategory.LUCK, "Rarity Find"),
+    GOLD_DROP(ModifierCategory.LUCK, "Gold Drop"),
+    DROP_CHANCE(ModifierCategory.LUCK, "Item Drop Chance")
 }

@@ -3,7 +3,6 @@ package com.runt9.heroDynasty.character.race
 import com.runt9.heroDynasty.character.attribute.Attributes
 
 abstract class Race {
-    abstract val name: String
     abstract val description: String
 
     abstract val worldMapActionsPerTurn: Int

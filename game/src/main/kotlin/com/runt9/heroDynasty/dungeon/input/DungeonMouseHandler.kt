@@ -38,11 +38,11 @@ class DungeonMouseHandler(private val dungeon: Dungeon) : InputAdapter() {
         }
 
         var path: MutableList<Coord> = playerToCursor.findPathPreScanned(Coord.get(newScreenX, newScreenY))
-        if (!path.isEmpty() && path.size > 1) { // If we click on ourselves, we want to skip the turn
+        if (path.isNotEmpty() && path.size > 1) { // If we click on ourselves, we want to skip the turn
             path = path.subList(1, path.size)
         }
 
-        if (dungeon.isVisible(newScreenX, newScreenY)) {
+        if (dungeon.isVisible(newScreenX, newScreenY) && path.isNotEmpty()) {
             dungeon.moveTo(path)
         }
 

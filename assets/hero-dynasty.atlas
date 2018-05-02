@@ -24,7 +24,7 @@ ant
   orig: 32, 32
   offset: 0, 0
   index: -1
-battleaxe_primary
+battle_axe_primary
   rotate: false
   xy: 1, 409
   size: 32, 32

@@ -4,7 +4,6 @@ import com.runt9.heroDynasty.character.attribute.Attributes
 
 
 class Halfling : Race() {
-    override val name = "Halfling"
     override val description = """
     """.trimIndent()
 

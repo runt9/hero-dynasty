@@ -5,9 +5,9 @@ import com.runt9.heroDynasty.character.ModifierType
 
 
 const val baseDamage = 10
-val unarmedDamageRange = Pair(0.25, 0.35)
-val accuracyClamp = Pair(5.0, 95.0)
-val incomingDamageClamp = Pair(0.1, 2.0)
+val unarmedDamageRange = 0.25 to 0.35
+val accuracyClamp = 5.0 to 95.0
+val incomingDamageClamp = 0.1 to 2.0
 
 fun basicAttack(attacker: Character, defender: Character): Double {
     // TODO: Dual-wielding
@@ -16,7 +16,7 @@ fun basicAttack(attacker: Character, defender: Character): Double {
     val dodge = defender.getModifier(ModifierType.DODGE)
 
     // Attack roll
-    val attackRollData = randomChance(1 + (accuracy - dodge), accuracyClamp)
+    val attackRollData = randomChance(multiplier = 1 + (accuracy - dodge), clampVal = accuracyClamp)
     if (!attackRollData.success) return 0.0
 
     // Damage roll
@@ -35,5 +35,6 @@ fun basicAttack(attacker: Character, defender: Character): Double {
     val critDamage = attacker.getModifier(ModifierType.CRIT_DAMAGE)
     val finalDamage = if (randomChance(critThreshold)) damageRoll * critDamage else damageRoll
     defender.hitPoints.current -= finalDamage
+    // TODO: Return info object rather than just damage. Include things like the attack roll, crit roll, etc
     return finalDamage
 }

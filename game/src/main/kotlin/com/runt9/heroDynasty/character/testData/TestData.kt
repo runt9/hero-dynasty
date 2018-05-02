@@ -92,6 +92,7 @@ val monsters = listOf(
 val testPlayer = run {
     val player = Player(rng.getRandomElement(Reflections("com.runt9.heroDynasty.character.race").getSubTypesOf(Race::class.java)).newInstance(), "runt9")
     player.inventory.primaryHand = rng.getRandomElement(Reflections("com.runt9.heroDynasty.character.item.weapon").getSubTypesOf(Weapon::class.java)).newInstance()
+    player.inventory.primaryHand?.rollStats()
     player.recalculateModifiers()
     player.applyModifiers()
     return@run player

@@ -3,7 +3,6 @@ package com.runt9.heroDynasty.character.race
 import com.runt9.heroDynasty.character.attribute.Attributes
 
 class Tengu : Race() {
-    override val name = "Tengu"
     override val description = """
     """.trimIndent()
 

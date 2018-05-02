@@ -3,7 +3,6 @@ package com.runt9.heroDynasty.character.race
 import com.runt9.heroDynasty.character.attribute.Attributes
 
 class Human : Race() {
-    override val name: String = "Human"
     override val description = """
         Humans are social creatures who are usually good at many things but rarely the best at any one thing
         (other than talking, boy do humans like to talk!).

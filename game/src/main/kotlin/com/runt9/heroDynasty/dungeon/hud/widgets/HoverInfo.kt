@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.runt9.heroDynasty.character.Character
@@ -20,7 +19,7 @@ import com.runt9.heroDynasty.util.toScale
 
 
 // TODO: Could probably use some touch ups, like scaling the font down since at high levels there will be too many modifiers to show
-class HoverInfo(private val skin: Skin) : WidgetGroup() {
+class HoverInfo : WidgetGroup() {
     private val infoPanel = Table()
     private var character: Character? = null
 
@@ -59,16 +58,18 @@ class HoverInfo(private val skin: Skin) : WidgetGroup() {
         infoPanel.add(Label("${character.hitPoints.current.toScale(2)} / ${character.hitPoints.max.toScale(2)}", style))
 
         character.modifiers.categorize(ModifierCategory.ATTACK, ModifierCategory.DAMAGE, ModifierCategory.DEFENSE,
-                ModifierCategory.RESISTANCE, ModifierCategory.CRIT, ModifierCategory.SPEED, ModifierCategory.RESOURCE_REGEN
+                ModifierCategory.INCOMING_DAMAGE, ModifierCategory.CRIT, ModifierCategory.SPEED, ModifierCategory.RESOURCE_REGEN
         ).toSortedMap(compareBy { it.name }).forEach { category, modifiers ->
             infoPanel.row()
             infoPanel.add(Label("${category.name.humanReadable()}:", style))
 
-            modifiers.groupByType().forEach { (type, sum) ->
+            modifiers.groupByType().forEach typeLoop@{ (type, sum) ->
+                if (sum == 1.0) return@typeLoop
+
                 infoPanel.row()
                 val smallStyle = LabelStyle(getFont(12), Color.WHITE)
 
-                val typeLabel = Label(" - ${type.name.humanReadable()}:", smallStyle)
+                val typeLabel = Label(" - ${type.displayName}:", smallStyle)
                 infoPanel.add(typeLabel)
                 val modifierLabel = Label("${sum.toScale(2)}x", smallStyle)
                 infoPanel.add(modifierLabel)
@@ -79,5 +80,9 @@ class HoverInfo(private val skin: Skin) : WidgetGroup() {
     override fun draw(batch: Batch, parentAlpha: Float) {
         update(character) // Force update on draw to update things like HP and modifier changes
         super.draw(batch, parentAlpha)
+    }
+
+    fun isCharacter(character: Character): Boolean {
+        return this.character == character
     }
 }

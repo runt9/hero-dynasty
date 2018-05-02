@@ -8,7 +8,8 @@ class Luck(override var value: Int) : Attribute(value) {
             Modifier(ModifierType.ACCURACY, 1 + (value * 0.0075)),
             Modifier(ModifierType.DODGE, 1 + (value * 0.0075)),
             Modifier(ModifierType.CRIT_CHANCE, 1 + (value * 0.0075)),
-            Modifier(ModifierType.RARITY_FIND, value * 0.002),
+            Modifier(ModifierType.DROP_CHANCE, 1 + (value * 0.0125)),
+            Modifier(ModifierType.RARITY_FIND, value * 0.002), // 0 base, gets added straight-up to regular drop roll
             Modifier(ModifierType.GOLD_DROP, 1 + (value * 0.025))
     )
 }

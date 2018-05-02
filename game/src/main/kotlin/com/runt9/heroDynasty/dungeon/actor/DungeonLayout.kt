@@ -122,7 +122,7 @@ class DungeonLayout(private val dungeon: Array<CharArray>, private val assetMap:
     fun removeCharacter(sprite: CharacterSprite) = removeActor(sprite)
 
     fun doFloatingNumber(healthDiff: Int, attacker: CharacterSprite, defender: CharacterSprite, heal: Boolean = false) {
-        val floatingNumber = FloatingText(if (healthDiff > 0) abs(healthDiff).toString() else "+$healthDiff")
+        val floatingNumber = FloatingText(if (healthDiff >= 0) abs(healthDiff).toString() else "+$healthDiff")
         addActor(floatingNumber)
         val attackVector = Direction.getRoughDirection(defender.coord.x - attacker.coord.x, defender.coord.y - attacker.coord.y)
         floatingNumber.color = if (heal) Color.GREEN else Color.RED
